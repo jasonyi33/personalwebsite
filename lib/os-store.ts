@@ -31,7 +31,7 @@ interface PersistShape {
   zCounter: number;
 }
 
-const STORAGE_KEY = 'nerv-os:windows';
+const STORAGE_KEY = 'desktop:windows';
 const Z_REBASE_AT = 9999;
 
 interface OsState {

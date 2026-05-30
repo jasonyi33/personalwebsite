@@ -1,8 +1,5 @@
 /**
- * RSS 2.0 feed for the LOGS app (blog).
- *
- * Uses `sortedPosts()` so drafts are filtered out and posts come back
- * newest-first, mirroring the in-app file-tree order.
+ * RSS 2.0 feed mirroring the Feed app's log list.
  */
 
 import { sortedPosts } from '@/lib/content';
@@ -26,7 +23,7 @@ export function GET(): Response {
 
   const items = posts
     .map((p) => {
-      const url = `${SITE.url}/blog/${p.slug}`;
+      const url = `${SITE.url}/feed#${p.slug}`;
       const pubDate = new Date(p.date).toUTCString();
       return [
         '    <item>',
@@ -44,7 +41,7 @@ export function GET(): Response {
     '<?xml version="1.0" encoding="UTF-8" ?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
     '  <channel>',
-    `    <title>${escapeXml(SITE.name)} — LOGS</title>`,
+    `    <title>${escapeXml(SITE.name)} — feed</title>`,
     `    <link>${escapeXml(SITE.url)}</link>`,
     `    <description>${escapeXml(SITE.description)}</description>`,
     `    <language>en-us</language>`,

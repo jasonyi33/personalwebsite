@@ -1,15 +1,5 @@
 'use client';
 
-/**
- * ProjectListItem — a single row in the Projects sidebar.
- *
- * Row layout:
- *   [01 ▸]  Title (Orbitron 13)              ● status dot
- *           tagline (mono 11, dim, truncated)
- *
- * Selected rows show a 3px cyan left border and a faint cyan wash.
- */
-
 import type { Project } from 'contentlayer/generated';
 import StatusDot from './StatusDot';
 
@@ -32,33 +22,31 @@ export default function ProjectListItem({
       type="button"
       onClick={onSelect}
       aria-current={selected}
-      className="block w-full cursor-pointer px-3 py-2.5 text-left transition-colors"
+      className="block w-full cursor-pointer px-3 py-2.5 text-left transition-colors hover:bg-[var(--accent-2)]"
       style={{
-        background: selected ? 'rgba(0,207,255,0.06)' : 'transparent',
-        borderLeft: selected
-          ? '3px solid var(--nerv-cyan)'
-          : '3px solid transparent',
+        background: selected ? 'var(--accent-2)' : 'transparent',
+        borderLeft: `2px solid ${selected ? 'var(--accent)' : 'transparent'}`,
       }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline gap-2">
             <span
-              className="font-[family-name:var(--font-mono)] text-[11px]"
-              style={{ color: 'var(--nerv-cyan-dim)' }}
+              className="text-[10px]"
+              style={{ color: 'var(--text-faint)', fontFamily: 'var(--font-mono)' }}
             >
-              {num} ▸
+              {num}
             </span>
             <span
-              className="truncate font-[family-name:var(--font-display)] text-[13px] tracking-wide"
-              style={{ color: 'var(--nerv-bone)' }}
+              className="truncate text-[13px] font-medium"
+              style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}
             >
               {project.title}
             </span>
           </div>
           <div
-            className="mt-1 truncate font-[family-name:var(--font-mono)] text-[11px]"
-            style={{ color: 'var(--nerv-bone-dim)' }}
+            className="mt-0.5 truncate text-[11px]"
+            style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
           >
             {project.tagline}
           </div>

@@ -1,64 +1,23 @@
 /**
- * Root Open Graph card.
- *
- * 1200x630 navy panel with the NERV-OS wordmark in cyan, a red NERV dot
- * top-left, and a hairline cyan grid. Uses system fonts to stay edge-fast
- * — custom fonts are not loaded here (per spec).
+ * Root Open Graph card — modern, minimal. 1200x630.
  */
 
 import { ImageResponse } from 'next/og';
 import { SITE } from '@/lib/seo';
 
 export const runtime = 'edge';
-export const alt = `${SITE.name} — personal site`;
+export const alt = `${SITE.name} — Jason Yi`;
 export const contentType = 'image/png';
 export const size = { width: 1200, height: 630 };
 
 const COLORS = {
-  bg: '#060814',
-  panel: '#0B0F1C',
-  cyan: '#00CFFF',
-  red: '#E5252A',
-  bone: '#EDEDED',
-  boneDim: '#8B93A6',
+  bg: '#0a0a0b',
+  text: '#ededed',
+  dim: '#8b8b92',
+  accent: '#7dd3fc',
 };
 
-const GRID_STEP = 60;
-
 export default function Image() {
-  // Build a simple cyan grid with absolutely-positioned hairlines.
-  const lines: React.ReactNode[] = [];
-  for (let x = GRID_STEP; x < size.width; x += GRID_STEP) {
-    lines.push(
-      <div
-        key={`v${x}`}
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: x,
-          width: 1,
-          background: 'rgba(0,207,255,0.06)',
-        }}
-      />,
-    );
-  }
-  for (let y = GRID_STEP; y < size.height; y += GRID_STEP) {
-    lines.push(
-      <div
-        key={`h${y}`}
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: y,
-          height: 1,
-          background: 'rgba(0,207,255,0.06)',
-        }}
-      />,
-    );
-  }
-
   return new ImageResponse(
     (
       <div
@@ -68,120 +27,92 @@ export default function Image() {
           display: 'flex',
           flexDirection: 'column',
           background: COLORS.bg,
-          color: COLORS.bone,
+          color: COLORS.text,
           position: 'relative',
-          fontFamily: 'monospace',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
         }}
       >
-        {lines}
-
-        {/* Top-left NERV mark */}
+        {/* Soft accent blob */}
         <div
           style={{
             position: 'absolute',
-            top: 48,
-            left: 48,
+            top: -200,
+            right: -200,
+            width: 700,
+            height: 700,
+            borderRadius: 9999,
+            background: COLORS.accent,
+            opacity: 0.12,
+            filter: 'blur(120px)',
             display: 'flex',
-            alignItems: 'center',
-            gap: 12,
           }}
-        >
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: 9999,
-              background: COLORS.red,
-            }}
-          />
-          <span
-            style={{
-              color: COLORS.red,
-              fontSize: 22,
-              letterSpacing: 6,
-              fontWeight: 700,
-            }}
-          >
-            NERV
-          </span>
-        </div>
+        />
 
-        {/* Top-right status */}
+        {/* Top label */}
         <div
           style={{
             position: 'absolute',
-            top: 52,
-            right: 56,
+            top: 60,
+            left: 64,
+            color: COLORS.dim,
+            fontSize: 22,
+            letterSpacing: 1,
             display: 'flex',
-            color: COLORS.cyan,
-            fontSize: 18,
-            letterSpacing: 4,
           }}
         >
-          SYSTEM STATUS: NORMAL
+          {SITE.url.replace(/^https?:\/\//, '')}
         </div>
 
-        {/* Center title */}
+        {/* Center */}
         <div
           style={{
             margin: 'auto',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 24,
+            alignItems: 'flex-start',
+            padding: '0 64px',
+            gap: 16,
           }}
         >
           <div
             style={{
-              fontSize: 168,
-              color: COLORS.cyan,
-              letterSpacing: 18,
-              fontWeight: 800,
+              fontSize: 140,
+              color: COLORS.text,
+              letterSpacing: -4,
+              fontWeight: 600,
               lineHeight: 1,
             }}
           >
-            JASON-OS
+            Jason Yi
           </div>
           <div
             style={{
-              fontSize: 28,
-              color: COLORS.bone,
-              letterSpacing: 8,
+              fontSize: 32,
+              color: COLORS.dim,
+              letterSpacing: 0,
+              maxWidth: 900,
             }}
           >
-            JASON YI — projects, logs, signals
+            EECS @ UC Berkeley. Building agentic software and voice-first interfaces.
           </div>
         </div>
 
-        {/* Bottom-left build tag */}
+        {/* Bottom row */}
         <div
           style={{
             position: 'absolute',
-            bottom: 36,
-            left: 48,
-            color: COLORS.red,
-            fontSize: 16,
-            letterSpacing: 4,
+            bottom: 56,
+            left: 64,
+            right: 64,
             display: 'flex',
+            justifyContent: 'space-between',
+            color: COLORS.dim,
+            fontSize: 22,
+            letterSpacing: 1,
           }}
         >
-          JASON-OS V3.0
-        </div>
-
-        {/* Bottom-right host */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 36,
-            right: 56,
-            color: COLORS.boneDim,
-            fontSize: 16,
-            letterSpacing: 4,
-            display: 'flex',
-          }}
-        >
-          {SITE.url.replace(/^https?:\/\//, '')}
+          <span style={{ display: 'flex' }}>about · experience · projects · feed · interests</span>
+          <span style={{ display: 'flex', color: COLORS.accent }}>—</span>
         </div>
       </div>
     ),

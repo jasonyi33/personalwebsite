@@ -4,12 +4,12 @@
  */
 
 export const SITE = {
-  name: 'JASON-OS',
+  name: 'jasonyi.live',
   description:
-    'Personal site of Jason Yi — EECS @ UC Berkeley. Projects, logs, and signals from an in-browser NERV-themed OS.',
+    'Personal site of Jason Yi — EECS @ UC Berkeley. About, experience, projects, feed, and interests, packaged as an in-browser desktop.',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://jasonyi.live',
   twitter: '@jasonyi361',
-  themeColor: '#00CFFF',
+  themeColor: '#7dd3fc',
 } as const;
 
 export type SiteConfig = typeof SITE;
