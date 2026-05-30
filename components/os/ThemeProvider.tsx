@@ -22,7 +22,7 @@ const ThemeCtx = createContext<ThemeContextValue | null>(null);
 const STORAGE_KEY = 'theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('dark');
+  const [theme, setThemeState] = useState<Theme>('light');
 
   useEffect(() => {
     const fromAttr = document.documentElement.getAttribute('data-theme');

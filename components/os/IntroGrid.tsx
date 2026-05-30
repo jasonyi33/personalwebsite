@@ -1,12 +1,13 @@
 'use client';
 
 /**
- * IntroGrid — landing overlay inspired by txnio.com.
+ * IntroGrid — opaque-black landing overlay.
  *
- * The desktop is fully mounted underneath; this overlay paints a faint grid
- * of cells with only their borders visible. Hovering a cell fills it (the
- * "blocking block" shows itself). A click anywhere fades the entire grid
- * away and dismisses the overlay so the desktop becomes interactive.
+ * The desktop is mounted underneath but completely hidden by a black grid
+ * that fills the viewport. Cells beneath the cursor turn transparent so the
+ * desktop peeks through; when the cursor leaves, the cell goes black again.
+ * A click anywhere fades every remaining cell out from the center and
+ * dismisses the overlay so the desktop becomes interactive.
  *
  * Cell density adapts to viewport (~64px per cell). prefers-reduced-motion
  * skips the stagger and just fades the whole overlay.
@@ -51,25 +52,31 @@ export default function IntroGrid({ onComplete }: Props) {
     window.setTimeout(onComplete, wait);
   }, [onComplete, reduced, total]);
 
-  const handleEnter = useCallback((i: number) => {
-    if (exiting) return;
-    setHovered((cur) => {
-      if (cur.has(i)) return cur;
-      const next = new Set(cur);
-      next.add(i);
-      return next;
-    });
-  }, [exiting]);
+  const handleEnter = useCallback(
+    (i: number) => {
+      if (exiting) return;
+      setHovered((cur) => {
+        if (cur.has(i)) return cur;
+        const next = new Set(cur);
+        next.add(i);
+        return next;
+      });
+    },
+    [exiting],
+  );
 
-  const handleLeave = useCallback((i: number) => {
-    if (exiting) return;
-    setHovered((cur) => {
-      if (!cur.has(i)) return cur;
-      const next = new Set(cur);
-      next.delete(i);
-      return next;
-    });
-  }, [exiting]);
+  const handleLeave = useCallback(
+    (i: number) => {
+      if (exiting) return;
+      setHovered((cur) => {
+        if (!cur.has(i)) return cur;
+        const next = new Set(cur);
+        next.delete(i);
+        return next;
+      });
+    },
+    [exiting],
+  );
 
   const handleClickAnywhere = useCallback(
     (e: React.MouseEvent) => {
@@ -104,10 +111,9 @@ export default function IntroGrid({ onComplete }: Props) {
       tabIndex={0}
       aria-label="Tap to enter"
       onClick={handleClickAnywhere}
-      className="fixed inset-0 z-[300]"
+      className="fixed inset-0 z-[9999]"
       style={{
         cursor: 'pointer',
-        background: 'transparent',
         opacity: reduced && exiting ? 0 : 1,
         transition: reduced ? `opacity ${EXIT_FADE_MS}ms ease-out` : undefined,
       }}
@@ -122,8 +128,6 @@ export default function IntroGrid({ onComplete }: Props) {
         {cells.map((i) => {
           const isHovered = hovered.has(i);
 
-          // Cells exit one-by-one from the center for the dismiss animation;
-          // delay scales with distance.
           let exitDelay = 0;
           if (exiting && !reduced) {
             const col = i % dims.cols;
@@ -134,58 +138,29 @@ export default function IntroGrid({ onComplete }: Props) {
             exitDelay = Math.min(220, Math.round(dist * EXIT_STAGGER_MS));
           }
 
-          const opacity = exiting ? 0 : isHovered ? 0.85 : 0;
+          const opacity = exiting ? 0 : isHovered ? 0 : 1;
           const transition = exiting
             ? `opacity ${EXIT_FADE_MS}ms ease-out ${exitDelay}ms`
             : 'opacity 140ms ease-out';
 
           return (
-            <span
+            <div
               key={i}
               onPointerEnter={() => handleEnter(i)}
               onPointerLeave={() => handleLeave(i)}
               style={{
-                position: 'relative',
-                borderRight: '1px solid var(--border)',
-                borderBottom: '1px solid var(--border)',
+                background: '#000',
+                // Outset shadow of solid black fills 1px subpixel gaps
+                // between adjacent cells without breaking the hover reveal:
+                // when this cell goes transparent, the neighbors still cover
+                // their own halo, leaving only this cell as a clean window.
+                boxShadow: '0 0 0 0.5px #000',
+                opacity,
+                transition,
               }}
-            >
-              <span
-                aria-hidden
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'var(--text)',
-                  opacity,
-                  transition,
-                  pointerEvents: 'none',
-                }}
-              />
-            </span>
+            />
           );
         })}
-      </div>
-
-      {/* Center prompt */}
-      <div
-        className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2"
-        style={{
-          opacity: exiting ? 0 : 1,
-          transition: `opacity ${EXIT_FADE_MS}ms ease-out`,
-        }}
-      >
-        <span
-          className="text-[28px] font-medium tracking-tight"
-          style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}
-        >
-          jasonyi.live
-        </span>
-        <span
-          className="text-[10px] tracking-[0.3em] uppercase"
-          style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
-        >
-          tap anywhere to enter
-        </span>
       </div>
     </div>
   );
