@@ -1,23 +1,16 @@
 'use client';
 
 /**
- * Client wrapper that does the SSR-disabled dynamic import of the
- * desktop shell. Next.js requires `dynamic({ ssr: false })` to be
- * called from a Client Component, so this file exists solely to host
- * that boundary.
+ * Client wrapper for the desktop shell. Mounts the desktop immediately and
+ * overlays IntroGrid on first visit so the landing feels alive — hovering
+ * reveals the desktop through the grid, clicking dismisses everything.
  *
- * Also responsible for the Phase 3 boot gate: first-visit users see
- * <BootSequence /> until they finish (or skip) it; repeat visitors and
- * `?skip-boot=1` bypass directly to the desktop.
- *
- * Phase 7: accepts an optional `initialDeeplink` that the deep-link
- * route pages (`/projects/[slug]`, `/blog/[slug]`, `/about`, `/now`) use
- * to tell the shell which app to open on mount.
+ * `?skip-boot=1` and a returning-visitor localStorage flag bypass the intro.
  */
 
 import dynamic from 'next/dynamic';
 import { useBoot } from '@/lib/boot';
-import BootSequence from '@/components/os/BootSequence';
+import IntroGrid from '@/components/os/IntroGrid';
 import type { Deeplink } from '@/lib/deeplink';
 
 const DesktopShell = dynamic(() => import('@/components/os/DesktopShell'), {
@@ -33,13 +26,14 @@ export default function DesktopShellClient({
 }: DesktopShellClientProps) {
   const { needsBoot, ready, finish } = useBoot();
 
-  // Avoid a hydration flicker: useBoot reads localStorage in an effect,
-  // so the very first render returns null until we know the answer.
+  // Don't render anything until we know whether the intro is needed —
+  // avoids a flicker between server (no intro) and client (maybe intro).
   if (!ready) return null;
 
-  if (needsBoot) {
-    return <BootSequence onComplete={finish} />;
-  }
-
-  return <DesktopShell initialDeeplink={initialDeeplink} />;
+  return (
+    <>
+      <DesktopShell initialDeeplink={initialDeeplink} />
+      {needsBoot ? <IntroGrid onComplete={finish} /> : null}
+    </>
+  );
 }

@@ -35,11 +35,11 @@ export default function WindowManager() {
   const visible = windows.filter((w) => !w.minimized);
 
   return (
-    <div className="fixed inset-0 z-10">
+    <div className="pointer-events-none fixed inset-0 z-10">
       {visible.map((w) => (
-        <Window key={w.id} windowState={w}>
-          {renderApp(w.appId)}
-        </Window>
+        <div key={w.id} className="pointer-events-auto">
+          <Window windowState={w}>{renderApp(w.appId)}</Window>
+        </div>
       ))}
     </div>
   );
