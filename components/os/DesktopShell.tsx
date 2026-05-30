@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * DesktopShell — the root of the OS surface. Mounts the wallpaper,
- * desktop icons, window manager, menubar, and dock; runs hydration of
- * persisted state, and auto-opens NERV_Terminal on the very first mount.
+ * DesktopShell — root of the OS surface. Switches to a mobile layout below
+ * 768px. On the desktop path it auto-opens About on the first visit and
+ * honors deep-link routes.
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useOsStore } from '@/lib/os-store';
 import { useDeeplinkBootstrap, type Deeplink } from '@/lib/deeplink';
 import Wallpaper from './Wallpaper';
@@ -14,47 +14,56 @@ import DesktopIcons from './DesktopIcons';
 import WindowManager from './WindowManager';
 import Menubar from './Menubar';
 import Dock from './Dock';
+import MobileLayout from './MobileLayout';
 
-const AUTOOPEN_KEY = 'nerv-os:autoopen-terminal';
+const AUTOOPEN_KEY = 'desktop:autoopen-about';
 
 interface DesktopShellProps {
   initialDeeplink?: Deeplink | null;
+}
+
+function useIsMobile(): boolean {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return mobile;
 }
 
 export default function DesktopShell({ initialDeeplink = null }: DesktopShellProps) {
   const hydrate = useOsStore((s) => s.hydrate);
   const hydrated = useOsStore((s) => s.hydrated);
   const openApp = useOsStore((s) => s.openApp);
+  const isMobile = useIsMobile();
 
-  // First, rehydrate persisted layout (no-op on SSR).
   useEffect(() => {
     hydrate();
   }, [hydrate]);
 
-  // Then, once hydrated, auto-open the terminal on first ever visit.
-  // Skip the auto-open when arriving via a deep-link route — the visitor
-  // came here to see a specific app, not the terminal.
   useEffect(() => {
     if (!hydrated) return;
     if (initialDeeplink) return;
+    if (isMobile) return;
     try {
       const already = window.localStorage.getItem(AUTOOPEN_KEY);
       if (already) return;
       window.localStorage.setItem(AUTOOPEN_KEY, '1');
-      // If something was already persisted, don't double-open.
-      const hasTerminal = useOsStore
-        .getState()
-        .windows.some((w) => w.appId === 'terminal');
-      if (!hasTerminal) {
-        openApp('terminal');
-      }
+      const hasAbout = useOsStore.getState().windows.some((w) => w.appId === 'about');
+      if (!hasAbout) openApp('about');
     } catch {
-      // ignore storage errors
+      /* ignore */
     }
-  }, [hydrated, openApp, initialDeeplink]);
+  }, [hydrated, openApp, initialDeeplink, isMobile]);
 
-  // Bootstrap the deep-link (no-op if not provided).
   useDeeplinkBootstrap(initialDeeplink);
+
+  if (isMobile) {
+    return <MobileLayout />;
+  }
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">

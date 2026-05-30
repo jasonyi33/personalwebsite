@@ -11,6 +11,18 @@ const Link = defineNestedType(() => ({
   },
 }));
 
+const BentoCard = defineNestedType(() => ({
+  name: 'BentoCard',
+  fields: {
+    id: { type: 'string', required: true },
+    title: { type: 'string', required: true },
+    size: { type: 'string', default: 'sm' },
+    body: { type: 'string' },
+    items: { type: 'list', of: { type: 'string' }, default: [] },
+    accent: { type: 'string' },
+  },
+}));
+
 export const Project = defineDocumentType(() => ({
   name: 'Project',
   filePathPattern: 'projects/**/*.mdx',
@@ -24,7 +36,6 @@ export const Project = defineDocumentType(() => ({
       options: ['live', 'wip', 'archived'],
       required: true,
     },
-    /** Optional human-readable status (e.g. "Acquired by SF Government"). Falls back to `status`. */
     statusLabel: { type: 'string' },
     year: { type: 'number', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
@@ -34,14 +45,29 @@ export const Project = defineDocumentType(() => ({
     order: { type: 'number', default: 999 },
   },
   computedFields: {
-    url: {
-      type: 'string',
-      resolve: (doc) => `/projects/${doc.slug}`,
-    },
-    readingTime: {
-      type: 'json',
-      resolve: (doc) => readingTime(doc.body.raw),
-    },
+    url: { type: 'string', resolve: (doc) => `/projects/${doc.slug}` },
+    readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
+  },
+}));
+
+export const Experience = defineDocumentType(() => ({
+  name: 'Experience',
+  filePathPattern: 'experience/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    company: { type: 'string', required: true },
+    slug: { type: 'string', required: true },
+    role: { type: 'string', required: true },
+    start: { type: 'string', required: true },
+    end: { type: 'string' },
+    location: { type: 'string' },
+    summary: { type: 'string' },
+    bullets: { type: 'list', of: { type: 'string' }, default: [] },
+    tags: { type: 'list', of: { type: 'string' }, default: [] },
+    order: { type: 'number', default: 999 },
+  },
+  computedFields: {
+    url: { type: 'string', resolve: (doc) => `/experience/${doc.slug}` },
   },
 }));
 
@@ -58,18 +84,9 @@ export const Post = defineDocumentType(() => ({
     draft: { type: 'boolean', default: false },
   },
   computedFields: {
-    url: {
-      type: 'string',
-      resolve: (doc) => `/blog/${doc.slug}`,
-    },
-    readingTime: {
-      type: 'json',
-      resolve: (doc) => readingTime(doc.body.raw),
-    },
-    year: {
-      type: 'number',
-      resolve: (doc) => new Date(doc.date).getFullYear(),
-    },
+    url: { type: 'string', resolve: (doc) => `/feed#${doc.slug}` },
+    readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
+    year: { type: 'number', resolve: (doc) => new Date(doc.date).getFullYear() },
   },
 }));
 
@@ -104,9 +121,19 @@ export const Now = defineDocumentType(() => ({
   },
 }));
 
+export const Interests = defineDocumentType(() => ({
+  name: 'Interests',
+  filePathPattern: 'interests.mdx',
+  contentType: 'mdx',
+  isSingleton: true,
+  fields: {
+    cards: { type: 'list', of: BentoCard, default: [] },
+  },
+}));
+
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Project, Post, About, Now],
+  documentTypes: [Project, Experience, Post, About, Now, Interests],
   mdx: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [

@@ -1,13 +1,4 @@
-/**
- * 404 page — themed as a NERV terminal readout.
- *
- * Rendered when Next.js cannot resolve a route (e.g. `/unknown-path` or an
- * unknown `[slug]` in `app/projects/[slug]`). Mirrors the boot scene chrome:
- * centered translucent panel over the global starfield body backdrop.
- */
-
 import Link from 'next/link';
-import NervLogo from '@/components/os/NervLogo';
 
 export default function NotFound() {
   return (
@@ -16,35 +7,38 @@ export default function NotFound() {
       style={{ background: 'transparent' }}
     >
       <div
-        className="flex w-full max-w-[560px] flex-col items-center gap-6 rounded-lg border p-8 text-center"
+        className="flex w-full max-w-[480px] flex-col items-start gap-4 rounded-xl border p-8"
         style={{
-          background: 'rgba(14, 18, 28, 0.78)',
-          backdropFilter: 'blur(14px) saturate(140%)',
-          WebkitBackdropFilter: 'blur(14px) saturate(140%)',
-          borderColor: 'var(--nerv-panel-edge)',
-          boxShadow:
-            '0 16px 50px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,207,255,0.10) inset',
+          background: 'var(--surface-2)',
+          backdropFilter: 'blur(24px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(140%)',
+          borderColor: 'var(--border)',
         }}
       >
-        <NervLogo size={64} title="NERV" />
-        <h1
-          className="font-[family-name:var(--font-mono)] text-[18px] tracking-[0.18em] sm:text-[20px]"
-          style={{ color: 'var(--nerv-cyan)' }}
+        <span
+          className="text-[11px] tracking-wide"
+          style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
         >
-          &gt; ERROR: NODE NOT FOUND
+          404
+        </span>
+        <h1
+          className="text-[22px] font-semibold tracking-tight"
+          style={{ color: 'var(--text)' }}
+        >
+          Not found.
         </h1>
         <p
-          className="font-[family-name:var(--font-mono)] text-[12px] leading-relaxed tracking-wide sm:text-[13px]"
-          style={{ color: 'var(--nerv-bone-dim)' }}
+          className="text-[13.5px] leading-[1.6]"
+          style={{ color: 'var(--text-dim)' }}
         >
-          the path you requested is not indexed in the MAGI database.
+          The page you requested doesn&apos;t exist. Head back to the desktop.
         </p>
         <Link
           href="/"
-          className="font-[family-name:var(--font-mono)] text-[12px] tracking-[0.18em] underline-offset-4 transition-opacity hover:opacity-80 focus-visible:underline sm:text-[13px]"
-          style={{ color: 'var(--nerv-cyan)' }}
+          className="mt-2 text-[13px] underline-offset-4 hover:underline"
+          style={{ color: 'var(--accent)' }}
         >
-          [RETURN TO DESKTOP]
+          ← back to desktop
         </Link>
       </div>
     </main>

@@ -1,25 +1,9 @@
 'use client';
 
-/**
- * ProjectsApp — two-pane Projects browser (spec 5.1).
- *
- * Left:  sortable sidebar of projects (StatusDot + tagline).
- * Right: detail pane with cover image and MDX body.
- *
- * Keyboard:  ArrowUp/Down change selection, Enter is a no-op (selection ==
- *            opening), Escape collapses to detail-only on mobile.
- *
- * Mobile (<640px): sidebar hides; tap a project to open detail, "back"
- *                  button returns to the list.
- *
- * Deep-link: ?project=<slug> opens that project on mount (Phase 7 will wire
- *            real URL sync).
- */
-
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { sortedProjects } from '@/lib/content';
-import ProjectListItem from './projects/ProjectListItem';
-import ProjectDetail from './projects/ProjectDetail';
+import { sortedExperiences } from '@/lib/content';
+import ExperienceListItem from './experience/ExperienceListItem';
+import ExperienceDetail from './experience/ExperienceDetail';
 
 function useIsNarrow(): boolean {
   const [narrow, setNarrow] = useState(false);
@@ -33,32 +17,31 @@ function useIsNarrow(): boolean {
   return narrow;
 }
 
-export default function ProjectsApp() {
-  const projects = useMemo(() => sortedProjects(), []);
+export default function ExperienceApp() {
+  const experiences = useMemo(() => sortedExperiences(), []);
   const [index, setIndex] = useState(0);
   const [mobileShowDetail, setMobileShowDetail] = useState(false);
   const narrow = useIsNarrow();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Initial deep-link via ?project=slug
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get('project');
+    const slug = params.get('experience');
     if (!slug) return;
-    const i = projects.findIndex((p) => p.slug === slug);
+    const i = experiences.findIndex((e) => e.slug === slug);
     if (i >= 0) {
       setIndex(i);
       setMobileShowDetail(true);
     }
-  }, [projects]);
+  }, [experiences]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (projects.length === 0) return;
+      if (experiences.length === 0) return;
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setIndex((i) => Math.min(projects.length - 1, i + 1));
+        setIndex((i) => Math.min(experiences.length - 1, i + 1));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setIndex((i) => Math.max(0, i - 1));
@@ -72,34 +55,31 @@ export default function ProjectsApp() {
         }
       }
     },
-    [projects.length, narrow, mobileShowDetail],
+    [experiences.length, narrow, mobileShowDetail],
   );
 
-  // Focus the container so keyboard nav works without a click first.
   useEffect(() => {
     containerRef.current?.focus();
   }, []);
 
-  if (projects.length === 0) {
+  if (experiences.length === 0) {
     return (
       <div className="flex h-full w-full items-center justify-center p-8">
         <span
           className="text-[12px]"
           style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
         >
-          no projects yet.
+          no experience yet.
         </span>
       </div>
     );
   }
 
-  const current = projects[index];
-  const nextProject = projects[(index + 1) % projects.length] ?? null;
+  const current = experiences[index];
   const handleSelect = (i: number) => {
     setIndex(i);
     if (narrow) setMobileShowDetail(true);
   };
-  const handleNext = () => setIndex((i) => (i + 1) % projects.length);
   const handleBack = () => setMobileShowDetail(false);
 
   const showSidebar = !narrow || !mobileShowDetail;
@@ -129,13 +109,13 @@ export default function ProjectsApp() {
               fontFamily: 'var(--font-mono)',
             }}
           >
-            projects
+            roles
           </div>
           <div className="flex flex-col py-1">
-            {projects.map((p, i) => (
-              <ProjectListItem
-                key={p.slug}
-                project={p}
+            {experiences.map((e, i) => (
+              <ExperienceListItem
+                key={e.slug}
+                experience={e}
                 index={i}
                 selected={i === index}
                 onSelect={() => handleSelect(i)}
@@ -147,11 +127,9 @@ export default function ProjectsApp() {
 
       {showDetail ? (
         <div className="min-w-0 flex-1">
-          <ProjectDetail
+          <ExperienceDetail
             key={current.slug}
-            project={current}
-            nextProject={nextProject && nextProject.slug !== current.slug ? nextProject : null}
-            onNext={handleNext}
+            experience={current}
             onBack={handleBack}
             showBack={narrow}
           />
