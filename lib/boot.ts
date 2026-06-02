@@ -1,14 +1,12 @@
 'use client';
 
 /**
- * useBoot — first-visit gate for the intro animation.
- *  - URL `?skip-boot=1` always skips.
- *  - localStorage `intro:seen=='1'` skips on repeat visits.
+ * useBoot — intro gate. The overlay shows on every page load so visitors
+ * always meet the grid first. `?skip-boot=1` is the one bypass — used by
+ * deep-link previews and tests.
  */
 
 import { useEffect, useState } from 'react';
-
-const STORAGE_KEY = 'intro:seen';
 
 export function useBoot() {
   const [needsBoot, setNeedsBoot] = useState(false);
@@ -17,17 +15,11 @@ export function useBoot() {
   useEffect(() => {
     const url = new URL(window.location.href);
     const skip = url.searchParams.get('skip-boot') === '1';
-    const seen = localStorage.getItem(STORAGE_KEY) === '1';
-    setNeedsBoot(!skip && !seen);
+    setNeedsBoot(!skip);
     setReady(true);
   }, []);
 
   const finish = () => {
-    try {
-      localStorage.setItem(STORAGE_KEY, '1');
-    } catch {
-      /* ignore */
-    }
     setNeedsBoot(false);
   };
 
