@@ -29,6 +29,8 @@
   --mesh-b:       #2d1b4d;
   --mesh-c:       #0a1530;
 
+  --intro-halo:   rgba(255,255,255,0.05);
+
   /* Legacy --nerv-* aliases so untouched files keep compiling. */
   --nerv-space:       var(--bg);
   --nerv-void:        var(--bg);
@@ -68,6 +70,8 @@
   --mesh-a:       #fde2d2;
   --mesh-b:       #e6d4f5;
   --mesh-c:       #fef3c7;
+
+  --intro-halo:   rgba(0,0,0,0.04);
 
   --nerv-space:       var(--bg);
   --nerv-void:        var(--bg);
