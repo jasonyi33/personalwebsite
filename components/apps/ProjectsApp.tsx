@@ -1,46 +1,35 @@
 'use client';
 
 /**
- * ProjectsApp — two-pane Projects browser (spec 5.1).
+ * ProjectsApp — recruiter-shaped browser.
  *
- * Left:  sortable sidebar of projects (StatusDot + tagline).
- * Right: detail pane with cover image and MDX body.
+ *  Default view: a wide featured card (the project with `featured: true` —
+ *  VoiceReach) + a grid of the remaining projects. Click a card to drill
+ *  into the detail view, which retains the prior keyboard-nav behavior.
  *
- * Keyboard:  ArrowUp/Down change selection, Enter is a no-op (selection ==
- *            opening), Escape collapses to detail-only on mobile.
- *
- * Mobile (<640px): sidebar hides; tap a project to open detail, "back"
- *                  button returns to the list.
- *
- * Deep-link: ?project=<slug> opens that project on mount (Phase 7 will wire
- *            real URL sync).
+ *  Deep-link: ?project=<slug> drills directly into the detail view.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { sortedProjects } from '@/lib/content';
-import ProjectListItem from './projects/ProjectListItem';
+import ProjectCard from './projects/ProjectCard';
 import ProjectDetail from './projects/ProjectDetail';
-
-function useIsNarrow(): boolean {
-  const [narrow, setNarrow] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 639px)');
-    const update = () => setNarrow(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
-  return narrow;
-}
 
 export default function ProjectsApp() {
   const projects = useMemo(() => sortedProjects(), []);
-  const [index, setIndex] = useState(0);
-  const [mobileShowDetail, setMobileShowDetail] = useState(false);
-  const narrow = useIsNarrow();
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const featured = useMemo(
+    () => projects.find((p) => p.featured) ?? projects[0],
+    [projects],
+  );
+  const others = useMemo(
+    () => projects.filter((p) => p.slug !== featured?.slug),
+    [projects, featured],
+  );
 
-  // Initial deep-link via ?project=slug
+  const [view, setView] = useState<'grid' | 'detail'>('grid');
+  const [index, setIndex] = useState(0);
+
+  // Honor deep-link.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
@@ -49,36 +38,39 @@ export default function ProjectsApp() {
     const i = projects.findIndex((p) => p.slug === slug);
     if (i >= 0) {
       setIndex(i);
-      setMobileShowDetail(true);
+      setView('detail');
     }
   }, [projects]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (projects.length === 0) return;
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setIndex((i) => Math.min(projects.length - 1, i + 1));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        setIndex((i) => Math.max(0, i - 1));
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (narrow) setMobileShowDetail(true);
-      } else if (e.key === 'Escape') {
-        if (narrow && mobileShowDetail) {
-          e.preventDefault();
-          setMobileShowDetail(false);
-        }
-      }
+  const openDetail = useCallback(
+    (slug: string) => {
+      const i = projects.findIndex((p) => p.slug === slug);
+      if (i < 0) return;
+      setIndex(i);
+      setView('detail');
     },
-    [projects.length, narrow, mobileShowDetail],
+    [projects],
   );
 
-  // Focus the container so keyboard nav works without a click first.
-  useEffect(() => {
-    containerRef.current?.focus();
-  }, []);
+  const handleNext = () => setIndex((i) => (i + 1) % projects.length);
+  const handleBack = () => setView('grid');
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (view !== 'detail') return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        setIndex((i) => (i + 1) % projects.length);
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setIndex((i) => (i - 1 + projects.length) % projects.length);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        setView('grid');
+      }
+    },
+    [view, projects.length],
+  );
 
   if (projects.length === 0) {
     return (
@@ -93,70 +85,64 @@ export default function ProjectsApp() {
     );
   }
 
-  const current = projects[index];
-  const nextProject = projects[(index + 1) % projects.length] ?? null;
-  const handleSelect = (i: number) => {
-    setIndex(i);
-    if (narrow) setMobileShowDetail(true);
-  };
-  const handleNext = () => setIndex((i) => (i + 1) % projects.length);
-  const handleBack = () => setMobileShowDetail(false);
-
-  const showSidebar = !narrow || !mobileShowDetail;
-  const showDetail = !narrow || mobileShowDetail;
+  if (view === 'detail') {
+    const current = projects[index];
+    const nextProject = projects[(index + 1) % projects.length] ?? null;
+    return (
+      <div
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        className="h-full w-full outline-none"
+      >
+        <ProjectDetail
+          key={current.slug}
+          project={current}
+          nextProject={nextProject && nextProject.slug !== current.slug ? nextProject : null}
+          onNext={handleNext}
+          onBack={handleBack}
+          showBack
+        />
+      </div>
+    );
+  }
 
   return (
-    <div
-      ref={containerRef}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      className="flex h-full w-full outline-none"
-    >
-      {showSidebar ? (
-        <aside
-          className="flex shrink-0 flex-col overflow-y-auto"
-          style={{
-            width: narrow ? '100%' : 260,
-            borderRight: narrow ? 'none' : '1px solid var(--border)',
-            background: 'rgba(0,0,0,0.06)',
-          }}
-        >
-          <div
-            className="px-3 py-2 text-[10px] tracking-wide"
-            style={{
-              color: 'var(--text-dim)',
-              borderBottom: '1px solid var(--border)',
-              fontFamily: 'var(--font-mono)',
-            }}
+    <div className="h-full w-full overflow-y-auto px-6 py-6">
+      <div className="mx-auto flex max-w-[1000px] flex-col gap-4">
+        <header className="flex items-baseline justify-between">
+          <h2
+            className="text-[14px] tracking-wide"
+            style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
           >
-            projects
-          </div>
-          <div className="flex flex-col py-1">
-            {projects.map((p, i) => (
-              <ProjectListItem
-                key={p.slug}
-                project={p}
-                index={i}
-                selected={i === index}
-                onSelect={() => handleSelect(i)}
-              />
-            ))}
-          </div>
-        </aside>
-      ) : null}
+            projects · {projects.length}
+          </h2>
+          <span
+            className="text-[10px] tracking-[0.18em]"
+            style={{ color: 'var(--text-faint)', fontFamily: 'var(--font-mono)' }}
+          >
+            SHIPPED · IN PROGRESS · ARCHIVED
+          </span>
+        </header>
 
-      {showDetail ? (
-        <div className="min-w-0 flex-1">
-          <ProjectDetail
-            key={current.slug}
-            project={current}
-            nextProject={nextProject && nextProject.slug !== current.slug ? nextProject : null}
-            onNext={handleNext}
-            onBack={handleBack}
-            showBack={narrow}
+        {featured ? (
+          <ProjectCard
+            project={featured}
+            variant="featured"
+            onSelect={() => openDetail(featured.slug)}
           />
+        ) : null}
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {others.map((p) => (
+            <ProjectCard
+              key={p.slug}
+              project={p}
+              variant="grid"
+              onSelect={() => openDetail(p.slug)}
+            />
+          ))}
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }

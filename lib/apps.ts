@@ -1,5 +1,7 @@
 /**
- * Apps registry — 5 surfaces shown in the dock & on the desktop.
+ * Apps registry. `hidden: true` keeps the app addressable by deeplink /
+ * direct route (the /feed page still works) but removes it from the dock,
+ * desktop-icons column, and mobile tab bar.
  */
 
 export type AppId =
@@ -9,7 +11,7 @@ export type AppId =
   | 'feed'
   | 'interests';
 
-export type AppIconKind = AppId;
+export type AppIconKind = AppId | 'resume';
 
 export interface AppDefinition {
   id: AppId;
@@ -19,6 +21,8 @@ export interface AppDefinition {
   dockLabel: string;
   icon: AppIconKind;
   defaultSize: { w: number; h: number };
+  /** If true, omit from dock + desktop icons + mobile tabs. */
+  hidden?: boolean;
 }
 
 export const APPS: readonly AppDefinition[] = [
@@ -49,6 +53,7 @@ export const APPS: readonly AppDefinition[] = [
     dockLabel: 'feed',
     icon: 'feed',
     defaultSize: { w: 920, h: 720 },
+    hidden: true,
   },
   {
     id: 'interests',

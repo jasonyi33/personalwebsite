@@ -3,6 +3,9 @@
 /**
  * Left-edge column of desktop icons. Single click opens the app. Hidden
  * below 768px (mobile uses MobileLayout).
+ *
+ * A literal Resume.pdf icon is rendered at the top of the column — it's
+ * not an OS "app", just a deep-link to the /resume route.
  */
 
 import { useOsStore } from '@/lib/os-store';
@@ -14,7 +17,26 @@ export default function DesktopIcons() {
 
   return (
     <div className="fixed left-4 top-12 z-10 hidden flex-col gap-3 md:flex">
-      {APPS.map((def) => (
+      <a
+        href="/resume"
+        className="group flex w-[68px] flex-col items-center gap-1.5 rounded-lg p-2 outline-none transition-colors hover:bg-[var(--accent-2)]"
+        aria-label="Open résumé"
+      >
+        <span
+          className="grid h-10 w-10 place-items-center rounded-lg"
+          style={{ color: 'var(--text)' }}
+        >
+          <AppIcon kind="resume" size={22} title="Resume" />
+        </span>
+        <span
+          className="text-center text-[10px] tracking-wide"
+          style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
+        >
+          resume
+        </span>
+      </a>
+
+      {APPS.filter((a) => !a.hidden).map((def) => (
         <button
           key={def.id}
           type="button"
