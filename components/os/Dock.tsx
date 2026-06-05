@@ -47,7 +47,7 @@ export default function Dock() {
       }}
       aria-label="Application dock"
     >
-      {APPS.map((app) => {
+      {APPS.filter((a) => !a.hidden).map((app) => {
         const isRunning = running.has(app.id);
         return (
           <button

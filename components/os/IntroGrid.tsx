@@ -1,17 +1,17 @@
 'use client';
 
 /**
- * IntroGrid — landing overlay over the (already-mounted) desktop.
+ * IntroGrid — brief landing animation. Plays once per session (gated by
+ * useBoot), then dissolves into the OS desktop. No interaction required;
+ * recruiters who don't hover/click still see the desktop within ~1.2s.
  *
- * Each cell renders a slice of the page's mesh gradient (via
- * background-attachment: fixed) so the grid as a whole reads as a fractured
- * version of the modern wallpaper — same colors, same motion, just split
- * into tiles. Hovering a cell makes it transparent so the desktop crisply
- * peeks through; leaving the cell returns it to mesh. A click anywhere
- * fades every remaining cell out from the center and dismisses the overlay.
+ * Each cell renders a slice of the page's mesh gradient (background-attachment:
+ * fixed) so the grid reads as a fractured version of the wallpaper. After a
+ * short hold, every cell fades from the center outward and the overlay
+ * unmounts via onComplete.
  *
- * The visitor's name + tagline sit centered above the grid; they fade out
- * with the overlay on dismiss.
+ * A click anywhere skips the remaining hold. prefers-reduced-motion uses a
+ * single short fade with no stagger.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -22,11 +22,10 @@ interface Props {
 }
 
 const CELL_SIZE = 64;
-const EXIT_STAGGER_MS = 5;
+const HOLD_MS = 700;
+const EXIT_STAGGER_MS = 4;
 const EXIT_FADE_MS = 360;
 
-// Same mesh recipe as body::before in globals.css, painted fixed so each cell
-// reveals the part of the gradient under its viewport position.
 const CELL_BG = `
   radial-gradient(at 18% 22%, var(--mesh-a) 0%, transparent 42%),
   radial-gradient(at 82% 18%, var(--mesh-b) 0%, transparent 45%),
@@ -37,7 +36,6 @@ const CELL_BG = `
 export default function IntroGrid({ onComplete }: Props) {
   const reduced = useReducedMotion();
   const [dims, setDims] = useState<{ cols: number; rows: number }>({ cols: 0, rows: 0 });
-  const [hovered, setHovered] = useState<Set<number>>(new Set());
   const [exiting, setExiting] = useState(false);
   const finished = useRef(false);
 
@@ -62,34 +60,17 @@ export default function IntroGrid({ onComplete }: Props) {
     window.setTimeout(onComplete, wait);
   }, [onComplete, reduced, total]);
 
-  const handleEnter = useCallback(
-    (i: number) => {
-      if (exiting) return;
-      setHovered((cur) => {
-        if (cur.has(i)) return cur;
-        const next = new Set(cur);
-        next.add(i);
-        return next;
-      });
-    },
-    [exiting],
-  );
+  // Auto-finish after a short hold. Visitors don't need to interact.
+  useEffect(() => {
+    if (total === 0) return;
+    const hold = reduced ? 200 : HOLD_MS;
+    const id = window.setTimeout(() => finish(), hold);
+    return () => window.clearTimeout(id);
+  }, [total, reduced, finish]);
 
-  const handleLeave = useCallback(
-    (i: number) => {
-      if (exiting) return;
-      setHovered((cur) => {
-        if (!cur.has(i)) return cur;
-        const next = new Set(cur);
-        next.delete(i);
-        return next;
-      });
-    },
-    [exiting],
-  );
-
-  const handleClickAnywhere = useCallback(
-    (e: React.MouseEvent) => {
+  // Allow click / key to skip the remaining hold.
+  const handleSkip = useCallback(
+    (e: React.MouseEvent | React.KeyboardEvent) => {
       e.preventDefault();
       finish();
     },
@@ -117,13 +98,11 @@ export default function IntroGrid({ onComplete }: Props) {
 
   return (
     <div
-      role="button"
-      tabIndex={0}
-      aria-label="Tap to enter"
-      onClick={handleClickAnywhere}
+      role="presentation"
+      onClick={handleSkip}
       className="fixed inset-0 z-[9999]"
       style={{
-        cursor: 'pointer',
+        cursor: 'default',
         opacity: reduced && exiting ? 0 : 1,
         transition: reduced ? `opacity ${EXIT_FADE_MS}ms ease-out` : undefined,
       }}
@@ -136,8 +115,6 @@ export default function IntroGrid({ onComplete }: Props) {
         }}
       >
         {cells.map((i) => {
-          const isHovered = hovered.has(i);
-
           let exitDelay = 0;
           if (exiting && !reduced) {
             const col = i % dims.cols;
@@ -148,7 +125,7 @@ export default function IntroGrid({ onComplete }: Props) {
             exitDelay = Math.min(240, Math.round(dist * EXIT_STAGGER_MS));
           }
 
-          const opacity = exiting ? 0 : isHovered ? 0 : 1;
+          const opacity = exiting ? 0 : 1;
           const transition = exiting
             ? `opacity ${EXIT_FADE_MS}ms ease-out ${exitDelay}ms`
             : 'opacity 160ms ease-out';
@@ -156,14 +133,10 @@ export default function IntroGrid({ onComplete }: Props) {
           return (
             <div
               key={i}
-              onPointerEnter={() => handleEnter(i)}
-              onPointerLeave={() => handleLeave(i)}
               style={{
                 background: CELL_BG,
                 backgroundAttachment: 'fixed',
                 backgroundSize: 'cover',
-                // Outer 0.5px halo of base bg absorbs subpixel gaps so the
-                // desktop doesn't leak through as a 1px grid pattern.
                 boxShadow:
                   'inset 0 0 24px var(--intro-halo), 0 0 0 0.5px var(--bg)',
                 opacity,
@@ -174,7 +147,7 @@ export default function IntroGrid({ onComplete }: Props) {
         })}
       </div>
 
-      {/* Centered identity — sits above the grid; clicks pass through to cells */}
+      {/* Centered identity — fades out with the grid. */}
       <div
         className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
         style={{
@@ -192,14 +165,8 @@ export default function IntroGrid({ onComplete }: Props) {
           className="mt-4 max-w-[640px] text-[clamp(14px,1.6vw,20px)] leading-snug"
           style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-sans)' }}
         >
-          EECS @ UC Berkeley. Building agentic software and voice-first interfaces.
+          AI Product Engineer · Berkeley EECS
         </p>
-        <span
-          className="mt-10 text-[10px] tracking-[0.3em] uppercase"
-          style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
-        >
-          hover · tap anywhere to enter
-        </span>
       </div>
     </div>
   );

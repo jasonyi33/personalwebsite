@@ -4,6 +4,8 @@ slug: "voicereach"
 tagline: "AI voice platform for homeless outreach documentation"
 status: "live"
 statusLabel: "Acquired by SF Government"
+outcomeChip: "Adopted by SF Gov · OpenAI DevDay"
+featured: true
 year: 2025
 tags: ["ai", "voice-ai", "react-native", "fastapi", "openai", "civic-tech", "whisper", "gpt-4o", "postgres", "mobile"]
 cover: "/projects/voicereach/cover.svg"
@@ -11,14 +13,88 @@ live: "https://www.youtube.com/watch?v=EDqQtysycT4"
 order: 1
 ---
 
-VoiceReach is a mobile AI platform built for homeless outreach workers in
-San Francisco. The app uses OpenAI Whisper for real-time transcription and
-GPT-4o to automatically structure outreach notes, reducing hours of manual
-paperwork and improving reporting consistency across teams.
+VoiceReach is a mobile AI platform for homeless outreach workers in San
+Francisco. Outreach is a deeply human job that, by city policy, also produces
+a large amount of structured paperwork — encounter logs, demographic intake,
+referral records, follow-up flags. The status quo was a clipboard or a typed
+form back at the office, hours after the conversation happened. VoiceReach
+replaces that with a voice-first phone app: speak the encounter, the system
+transcribes, extracts the fields the city needs, and writes a structured
+record while the worker is still in the field.
 
-Built with React Native and FastAPI, the platform supports voice-first data
-collection, GPS tagging, consent-based photo capture, and real-time
-search/filtering for case management workflows. VoiceReach won 1st place
-out of 300+ participants at the SF10x Civics Hackathon and was later
-presented on stage at OpenAI DevDay as part of the *Built for SF by SF*
-showcase.
+`problem`
+
+Outreach workers spend a meaningful fraction of their week on documentation
+that can't easily be done in the moment. They're standing on a sidewalk,
+hands full, holding a conversation that has to take priority over a form. The
+real cost isn't the typing — it's the *recall loss* between the encounter and
+when they finally sit down to write it up. Programs lose detail, downstream
+case managers lose context, and city dashboards lose accuracy.
+
+A second problem is shape: city programs want fields, not paragraphs. A
+free-text journal entry doesn't help a coordinator who needs to know how many
+unique individuals were contacted in a given census tract this week, or how
+many referrals to shelter were accepted. The tool needs to produce *structured*
+output without making the worker think structurally during the conversation.
+
+`approach`
+
+The core design choice was voice-first capture with structure-then-search on
+the backend, instead of a form-first UX with voice as a transcription helper.
+Workers narrate freely; the system handles the rest.
+
+- **React Native** for the client: outreach happens across iOS and Android
+  city-issued phones; one codebase mattered more than native polish. The app
+  also has to feel responsive on weak signal, so we lean on optimistic local
+  state and queue uploads when the network returns.
+- **Whisper** for transcription: street audio is harder than studio audio
+  (wind, traffic, code-switching, accents). Whisper's robustness on noisy
+  real-world recordings was the deciding factor over cheaper ASR.
+- **GPT-4o** for structured extraction: we hand it the transcript plus a
+  schema describing the city's required fields and reference rubrics. It
+  returns a typed object that the FastAPI service validates before writing.
+  When extraction is uncertain, the worker sees an inline confirm-or-edit
+  surface instead of silent failure.
+- **GPS + consent-based photo capture**: location and optional photo are
+  attached to each encounter. The consent flow is explicit and reversible —
+  more on that below.
+- **FastAPI + Postgres**: a small typed API. Encounters, people (loosely
+  linked, not deduplicated to a strict identity), referrals, and an audit
+  log live in Postgres; the schema mirrors the city's reporting requirements.
+
+`trade-offs`
+
+A few decisions had real cost on the other side.
+
+- **Latency vs. accuracy on transcription.** Whisper is slower than smaller
+  ASR. We accepted ~2–4s of transcription latency in exchange for output
+  workers actually trust. A faster, lower-quality model would have meant
+  workers re-typing, which defeats the point.
+- **Cloud-first, not on-device.** Running the LLM step on-device would be
+  more private but materially worse output. We kept the heavy step in the
+  cloud and instead invested in consent, redaction, and an explicit audit
+  trail. Privacy is a posture, not a latency budget.
+- **Soft identity, not strict matching.** Outreach populations are
+  intentionally not over-identified. We avoided deduping people aggressively
+  across encounters; a coordinator can merge two records, but the system
+  doesn't unify them silently. Less data hygiene, more dignity.
+- **Loose schema, strict validator.** GPT-4o sometimes invents fields. The
+  validator is the source of truth — anything off-schema gets rejected and
+  surfaced to the worker, not silently logged.
+
+`outcome`
+
+VoiceReach won 1st place out of 300+ teams at the SF10x Civics Hackathon and
+was later presented on stage at OpenAI DevDay as part of the *Built for SF
+by SF* showcase. The City of San Francisco adopted the platform for use
+inside outreach programs — a rare path for a hackathon project, and the
+strongest signal we could ask for that the workflow actually fits the work.
+
+`what i'd do differently`
+
+Two things. First, I'd build the offline mode earlier — we shipped with
+queue-on-reconnect, but a true offline-first pipeline (local Whisper + local
+schema validation, cloud reconciliation later) would have moved adoption
+faster. Second, I'd invest in evaluating extraction quality on real
+transcripts much sooner. Hackathon-quality eval relies on vibes; production
+adoption demanded a real golden set, and we built that retroactively.

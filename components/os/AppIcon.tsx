@@ -78,6 +78,17 @@ export default function AppIcon({ kind, size = 32, className, title }: Props) {
         </svg>
       );
 
+    case 'resume':
+      // Document with fold + lines.
+      return (
+        <svg {...common} xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3h8l4 4v14H6z" />
+          <path d="M14 3v4h4" />
+          <path d="M9 12h6" />
+          <path d="M9 16h6" />
+        </svg>
+      );
+
     default:
       return null;
   }

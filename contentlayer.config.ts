@@ -37,6 +37,10 @@ export const Project = defineDocumentType(() => ({
       required: true,
     },
     statusLabel: { type: 'string' },
+    /** Short outcome chip for the projects window (e.g. "1st · SF10x"). */
+    outcomeChip: { type: 'string' },
+    /** If true, render this project as the wide featured card. */
+    featured: { type: 'boolean', default: false },
     year: { type: 'number', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     cover: { type: 'string' },
@@ -102,6 +106,16 @@ export const About = defineDocumentType(() => ({
     location: { type: 'string', required: true },
     email: { type: 'string' },
     links: { type: 'list', of: Link, default: [] },
+    /** Eyebrow above the headline, e.g. "BERKELEY EECS · AI PRODUCT ENGINEER". */
+    eyebrow: { type: 'string' },
+    /** Big claim line, e.g. "I ship AI products end-to-end." */
+    headline: { type: 'string' },
+    /** Supporting 1–2 sentence value proposition under the headline. */
+    valueProp: { type: 'string' },
+    /** 3–4 short credential chips, ordered. */
+    chips: { type: 'list', of: { type: 'string' }, default: [] },
+    /** Optional availability status line — falsy hides the dot. */
+    availability: { type: 'string' },
   },
 }));
 

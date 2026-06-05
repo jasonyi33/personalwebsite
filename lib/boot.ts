@@ -1,12 +1,14 @@
 'use client';
 
 /**
- * useBoot — intro gate. The overlay shows on every page load so visitors
- * always meet the grid first. `?skip-boot=1` is the one bypass — used by
- * deep-link previews and tests.
+ * useBoot — session-scoped intro gate. The IntroGrid plays once per browser
+ * session (per tab). Subsequent navigations in the same session skip it.
+ * `?skip-boot=1` bypasses for deep-link previews and tests.
  */
 
 import { useEffect, useState } from 'react';
+
+const SESSION_KEY = 'jy:boot-played';
 
 export function useBoot() {
   const [needsBoot, setNeedsBoot] = useState(false);
@@ -15,11 +17,22 @@ export function useBoot() {
   useEffect(() => {
     const url = new URL(window.location.href);
     const skip = url.searchParams.get('skip-boot') === '1';
-    setNeedsBoot(!skip);
+    let played = false;
+    try {
+      played = window.sessionStorage.getItem(SESSION_KEY) === '1';
+    } catch {
+      /* sessionStorage unavailable — treat as not played */
+    }
+    setNeedsBoot(!skip && !played);
     setReady(true);
   }, []);
 
   const finish = () => {
+    try {
+      window.sessionStorage.setItem(SESSION_KEY, '1');
+    } catch {
+      /* ignore */
+    }
     setNeedsBoot(false);
   };
 

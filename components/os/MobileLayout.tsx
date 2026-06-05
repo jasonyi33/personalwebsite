@@ -55,7 +55,7 @@ export default function MobileLayout() {
     <div className="mobile-shell flex min-h-screen flex-col">
       {/* Top bar */}
       <header
-        className="sticky top-0 z-30 flex h-12 items-center justify-between border-b px-4"
+        className="sticky top-0 z-30 flex h-12 items-center justify-between gap-3 border-b px-4"
         style={{
           background: 'var(--surface-2)',
           backdropFilter: 'blur(20px) saturate(140%)',
@@ -64,34 +64,61 @@ export default function MobileLayout() {
         }}
       >
         <span
-          className="text-[13px]"
+          className="min-w-0 truncate text-[13px]"
           style={{ color: 'var(--text)', fontFamily: 'var(--font-mono)' }}
         >
-          jasonyi.live
+          <span>Jason Yi</span>
+          <span style={{ color: 'var(--text-dim)' }}>{' · '}AI Product Eng</span>
         </span>
-        <button
-          type="button"
-          onClick={toggle}
-          aria-label={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
-          className="grid h-8 w-8 place-items-center rounded transition-colors"
-          style={{ color: 'var(--text-dim)' }}
-        >
-          {theme === 'dark' ? (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+        <div className="flex shrink-0 items-center gap-1">
+          <a
+            href="/resume"
+            aria-label="Open résumé"
+            className="grid h-8 w-8 place-items-center rounded transition-colors hover:bg-[var(--accent-2)]"
+            style={{ color: 'var(--text)' }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 3h8l4 4v14H6z" />
+              <path d="M14 3v4h4" />
+              <path d="M9 12h6" />
+              <path d="M9 16h6" />
             </svg>
-          ) : (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </a>
+          <a
+            href="mailto:jasonyi2023@gmail.com"
+            aria-label="Email Jason"
+            className="grid h-8 w-8 place-items-center rounded transition-colors hover:bg-[var(--accent-2)]"
+            style={{ color: 'var(--text)' }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M3 7l9 6 9-6" />
             </svg>
-          )}
-        </button>
+          </a>
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
+            className="grid h-8 w-8 place-items-center rounded transition-colors"
+            style={{ color: 'var(--text-dim)' }}
+          >
+            {theme === 'dark' ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+              </svg>
+            )}
+          </button>
+        </div>
       </header>
 
       {/* Sections */}
       <main className="flex-1 pb-20">
-        {APPS.map((app) => {
+        {APPS.filter((a) => !a.hidden).map((app) => {
           const Section = SECTION_RENDERERS[app.id];
           return (
             <section
@@ -130,7 +157,7 @@ export default function MobileLayout() {
           borderColor: 'var(--border)',
         }}
       >
-        {APPS.map((app) => {
+        {APPS.filter((a) => !a.hidden).map((app) => {
           const isActive = active === app.id;
           return (
             <button

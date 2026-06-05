@@ -74,10 +74,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
         <div
           style={{
-            marginTop: 80,
+            marginTop: 72,
             display: 'flex',
             flexDirection: 'column',
-            gap: 24,
+            gap: 20,
             maxWidth: 1020,
           }}
         >
@@ -103,6 +103,23 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           >
             {project.tagline}
           </div>
+          {project.outcomeChip ? (
+            <div
+              style={{
+                display: 'flex',
+                alignSelf: 'flex-start',
+                marginTop: 8,
+                padding: '8px 16px',
+                borderRadius: 999,
+                border: `1px solid ${COLORS.accent}`,
+                color: COLORS.accent,
+                fontSize: 22,
+                letterSpacing: 0.5,
+              }}
+            >
+              {project.outcomeChip}
+            </div>
+          ) : null}
         </div>
 
         <div
@@ -115,7 +132,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             letterSpacing: 1,
           }}
         >
-          <span style={{ display: 'flex' }}>{project.year}</span>
+          <span style={{ display: 'flex' }}>
+            jason yi · {project.year}
+          </span>
           <span style={{ display: 'flex', color: COLORS.accent }}>—</span>
         </div>
       </div>

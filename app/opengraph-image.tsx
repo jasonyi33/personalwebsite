@@ -6,7 +6,7 @@ import { ImageResponse } from 'next/og';
 import { SITE } from '@/lib/seo';
 
 export const runtime = 'edge';
-export const alt = `${SITE.name} — Jason Yi`;
+export const alt = 'Jason Yi · AI Product Engineer';
 export const contentType = 'image/png';
 export const size = { width: 1200, height: 630 };
 
@@ -87,13 +87,25 @@ export default function Image() {
           </div>
           <div
             style={{
-              fontSize: 32,
-              color: COLORS.dim,
+              fontSize: 36,
+              color: COLORS.text,
               letterSpacing: 0,
-              maxWidth: 900,
+              maxWidth: 950,
+              fontWeight: 500,
             }}
           >
-            EECS @ UC Berkeley. Building agentic software and voice-first interfaces.
+            AI Product Engineer · Berkeley EECS
+          </div>
+          <div
+            style={{
+              fontSize: 26,
+              color: COLORS.dim,
+              letterSpacing: 0,
+              maxWidth: 950,
+              marginTop: 8,
+            }}
+          >
+            I ship AI products end-to-end. Prev: TikTok, Google · 1st @ SF10x → OpenAI DevDay
           </div>
         </div>
 
@@ -111,7 +123,7 @@ export default function Image() {
             letterSpacing: 1,
           }}
         >
-          <span style={{ display: 'flex' }}>about · experience · projects · feed · interests</span>
+          <span style={{ display: 'flex' }}>about · experience · projects · interests</span>
           <span style={{ display: 'flex', color: COLORS.accent }}>—</span>
         </div>
       </div>
