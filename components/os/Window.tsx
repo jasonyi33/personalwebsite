@@ -62,10 +62,10 @@ export default function Window({ windowState, children }: Props) {
       dragListener={false}
       dragControls={dragControls}
       dragConstraints={{
-        left: -x + 0,
-        top: -y + 28,
+        left: -x + (80 - w),
+        top: -y + 32,
         right: typeof window !== 'undefined' ? window.innerWidth - x - 80 : 2000,
-        bottom: typeof window !== 'undefined' ? window.innerHeight - y - 80 : 2000,
+        bottom: typeof window !== 'undefined' ? window.innerHeight - y - 40 : 2000,
       }}
       initial={reduced ? false : { scale: 0.96, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
@@ -75,7 +75,11 @@ export default function Window({ windowState, children }: Props) {
         ease: [0.165, 0.84, 0.44, 1],
       }}
       onDragEnd={(_, info) => {
-        moveWindow(id, x + info.offset.x, y + info.offset.y);
+        const vw = typeof window !== 'undefined' ? window.innerWidth : 2000;
+        const vh = typeof window !== 'undefined' ? window.innerHeight : 2000;
+        const nextX = Math.min(vw - 80, Math.max(80 - w, x + info.offset.x));
+        const nextY = Math.min(vh - 40, Math.max(32, y + info.offset.y));
+        moveWindow(id, nextX, nextY);
       }}
       onPointerDownCapture={() => {
         if (!focused) focusWindow(id);
