@@ -41,8 +41,8 @@ export default function AboutApp() {
           ) : null}
 
           <h1
-            className="text-[28px] font-semibold tracking-tight"
-            style={{ color: 'var(--text)' }}
+            className="text-[28px] font-medium tracking-tight"
+            style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
           >
             {about.name}
           </h1>
@@ -50,7 +50,7 @@ export default function AboutApp() {
           {about.headline ? (
             <p
               className="mt-2 text-[22px] font-medium tracking-tight"
-              style={{ color: 'var(--text)' }}
+              style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
             >
               {about.headline}
             </p>
