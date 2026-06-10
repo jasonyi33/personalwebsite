@@ -156,8 +156,8 @@ export default function IntroGrid({ onComplete }: Props) {
         }}
       >
         <h1
-          className="text-[clamp(48px,9vw,112px)] font-semibold tracking-[-0.04em] leading-none"
-          style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}
+          className="text-[clamp(48px,9vw,112px)] font-medium tracking-[-0.035em] leading-none"
+          style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
         >
           Jason Yi
         </h1>

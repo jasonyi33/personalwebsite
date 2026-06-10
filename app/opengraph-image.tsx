@@ -4,6 +4,7 @@
 
 import { ImageResponse } from 'next/og';
 import { SITE } from '@/lib/seo';
+import { loadSpaceGroteskMedium } from '@/lib/og-fonts';
 
 export const runtime = 'edge';
 export const alt = 'Jason Yi · AI Product Engineer';
@@ -17,7 +18,8 @@ const COLORS = {
   accent: '#7dd3fc',
 };
 
-export default function Image() {
+export default async function Image() {
+  const displayFont = await loadSpaceGroteskMedium();
   return new ImageResponse(
     (
       <div
@@ -78,9 +80,10 @@ export default function Image() {
             style={{
               fontSize: 140,
               color: COLORS.text,
-              letterSpacing: -4,
-              fontWeight: 600,
+              letterSpacing: -5,
+              fontWeight: 500,
               lineHeight: 1,
+              fontFamily: 'Space Grotesk',
             }}
           >
             Jason Yi
@@ -128,6 +131,16 @@ export default function Image() {
         </div>
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [
+        {
+          name: 'Space Grotesk',
+          data: displayFont,
+          style: 'normal',
+          weight: 500,
+        },
+      ],
+    },
   );
 }

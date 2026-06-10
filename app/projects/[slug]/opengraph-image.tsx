@@ -5,6 +5,7 @@
 import { ImageResponse } from 'next/og';
 import { allProjects } from 'contentlayer/generated';
 import { SITE } from '@/lib/seo';
+import { loadSpaceGroteskMedium } from '@/lib/og-fonts';
 
 export const alt = `Project — ${SITE.name}`;
 export const contentType = 'image/png';
@@ -27,6 +28,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   if (!project) {
     return new ImageResponse(<div style={{ display: 'flex' }}>not found</div>, size);
   }
+
+  const displayFont = await loadSpaceGroteskMedium();
 
   return new ImageResponse(
     (
@@ -85,10 +88,11 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             style={{
               fontSize: 96,
               color: COLORS.text,
-              letterSpacing: -3,
-              fontWeight: 600,
+              letterSpacing: -3.5,
+              fontWeight: 500,
               lineHeight: 1.05,
               display: 'flex',
+              fontFamily: 'Space Grotesk',
             }}
           >
             {project.title}
@@ -139,6 +143,16 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         </div>
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [
+        {
+          name: 'Space Grotesk',
+          data: displayFont,
+          style: 'normal',
+          weight: 500,
+        },
+      ],
+    },
   );
 }
