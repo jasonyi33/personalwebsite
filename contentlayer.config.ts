@@ -44,6 +44,12 @@ export const Project = defineDocumentType(() => ({
     year: { type: 'number', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     cover: { type: 'string' },
+    /** Optional video shown at the top of the detail view (YouTube URL or direct file). */
+    video: { type: 'string' },
+    /** Custom thumbnail image for the video. Falls back to `cover`. */
+    videoPoster: { type: 'string' },
+    /** Start time in seconds. Applied on play. */
+    videoStart: { type: 'number', default: 0 },
     live: { type: 'string' },
     repo: { type: 'string' },
     order: { type: 'number', default: 999 },

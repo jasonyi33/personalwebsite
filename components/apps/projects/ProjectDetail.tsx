@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import type { Project } from 'contentlayer/generated';
 import { MDXComponents } from '@/components/mdx/MDXComponents';
+import ProjectVideo from './ProjectVideo';
 
 interface Props {
   project: Project;
@@ -97,23 +98,32 @@ export default function ProjectDetail({
           )}
         </header>
 
-        <div
-          className="relative mb-6 w-full overflow-hidden rounded-lg"
-          style={{
-            aspectRatio: '16 / 9',
-            background: 'rgba(0,0,0,0.25)',
-            border: '1px solid var(--border)',
-          }}
-        >
-          <Image
-            src={coverSrc}
-            alt={`${project.title} cover`}
-            fill
-            sizes="(max-width: 680px) 100vw, 680px"
-            className="object-cover"
-            unoptimized={coverSrc.startsWith('data:')}
+        {project.video ? (
+          <ProjectVideo
+            src={project.video}
+            poster={project.videoPoster ?? project.cover}
+            startSeconds={project.videoStart ?? 0}
+            title={project.title}
           />
-        </div>
+        ) : (
+          <div
+            className="relative mb-6 w-full overflow-hidden rounded-lg"
+            style={{
+              aspectRatio: '16 / 9',
+              background: 'rgba(0,0,0,0.25)',
+              border: '1px solid var(--border)',
+            }}
+          >
+            <Image
+              src={coverSrc}
+              alt={`${project.title} cover`}
+              fill
+              sizes="(max-width: 680px) 100vw, 680px"
+              className="object-cover"
+              unoptimized={coverSrc.startsWith('data:')}
+            />
+          </div>
+        )}
 
         <article
           className="text-[13.5px] leading-[1.75]"
