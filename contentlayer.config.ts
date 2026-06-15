@@ -41,6 +41,8 @@ export const Project = defineDocumentType(() => ({
     outcomeChip: { type: 'string' },
     /** If true, render this project as the wide featured card. */
     featured: { type: 'boolean', default: false },
+    /** If true, surface on /recruiter. */
+    recruiterPick: { type: 'boolean', default: false },
     year: { type: 'number', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     cover: { type: 'string' },
@@ -74,6 +76,8 @@ export const Experience = defineDocumentType(() => ({
     summary: { type: 'string' },
     bullets: { type: 'list', of: { type: 'string' }, default: [] },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
+    /** If true, surface on /recruiter. */
+    recruiterPick: { type: 'boolean', default: false },
     order: { type: 'number', default: 999 },
   },
   computedFields: {
@@ -122,6 +126,10 @@ export const About = defineDocumentType(() => ({
     chips: { type: 'list', of: { type: 'string' }, default: [] },
     /** Optional availability status line — falsy hides the dot. */
     availability: { type: 'string' },
+    /** Graduation term, e.g. "May 2028" — used in /recruiter fast-facts line. */
+    gradTerm: { type: 'string' },
+    /** Roles open to, e.g. "FTE + intern" — used in /recruiter fast-facts line. */
+    openTo: { type: 'string' },
   },
 }));
 

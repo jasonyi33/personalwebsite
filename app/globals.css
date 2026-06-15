@@ -139,6 +139,15 @@ body::before {
   100% { background-position:  10%  20%,   90%  10%,  40%  90%; }
 }
 
+@keyframes pulse-dot {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.35; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

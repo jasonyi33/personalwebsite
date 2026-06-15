@@ -30,3 +30,9 @@ export const sortedExperiences = () =>
       if (o !== 0) return o;
       return b.start.localeCompare(a.start);
     });
+
+export const recruiterProjects = () =>
+  sortedProjects().filter((p) => p.recruiterPick);
+
+export const recruiterExperiences = () =>
+  sortedExperiences().filter((e) => e.recruiterPick);
