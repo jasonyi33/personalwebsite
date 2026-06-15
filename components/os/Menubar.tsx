@@ -57,11 +57,11 @@ export default function Menubar() {
 
       <div className="flex shrink-0 items-center gap-3">
         <a
-          href="/resume"
+          href="/recruiter"
           className="hidden sm:inline-flex items-center gap-1 rounded px-1.5 py-0.5 transition-colors hover:bg-[var(--accent-2)]"
           style={{ color: 'var(--text)' }}
         >
-          Resume <span aria-hidden style={{ color: 'var(--text-dim)' }}>↓</span>
+          Resume <span aria-hidden style={{ color: 'var(--text-dim)' }}>↗</span>
         </a>
         <a
           href={`mailto:${EMAIL}`}
