@@ -1,7 +1,9 @@
 'use client';
 
-import { useRef, type PointerEvent } from 'react';
+import Link from 'next/link';
+import { useEffect, useRef, type PointerEvent } from 'react';
 import type { Project } from 'contentlayer/generated';
+import { useNavAnchors } from '@/components/shell/NavAnchorContext';
 
 interface Props {
   project: Project;
@@ -11,6 +13,31 @@ const MAX_TILT = 10;
 const CHIP_LIFT_PX = 30;
 
 export default function TiltedProjectCard({ project }: Props) {
+  const { register, setOriginKey } = useNavAnchors();
+  const linkRef = useRef<HTMLAnchorElement | null>(null);
+  const anchorKey = `card:${project.slug}`;
+
+  useEffect(() => {
+    const sync = () => {
+      const el = linkRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      register(anchorKey, {
+        x: r.left + r.width / 2,
+        y: r.top + r.height / 2,
+        w: r.width,
+        h: r.height,
+      });
+    };
+    sync();
+    window.addEventListener('resize', sync);
+    window.addEventListener('scroll', sync, { passive: true });
+    return () => {
+      window.removeEventListener('resize', sync);
+      window.removeEventListener('scroll', sync);
+    };
+  }, [register, anchorKey]);
+
   const cardRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
 
@@ -34,6 +61,12 @@ export default function TiltedProjectCard({ project }: Props) {
   };
 
   return (
+    <Link
+      ref={(el: HTMLAnchorElement | null) => { linkRef.current = el; }}
+      href={`/projects/${project.slug}`}
+      onClick={() => setOriginKey(anchorKey)}
+      className="block"
+    >
     <div
       ref={cardRef}
       onPointerMove={onPointerMove}
@@ -121,15 +154,25 @@ export default function TiltedProjectCard({ project }: Props) {
         ) : null}
 
         {project.video ? (
-          <a
-            href={
-              project.videoStart && project.videoStart > 0
-                ? `${project.video}${project.video.includes('?') ? '&' : '?'}t=${project.videoStart}s`
-                : project.video
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] underline-offset-4 hover:underline"
+          // eslint-disable-next-line jsx-a11y/anchor-is-valid
+          <span
+            role="link"
+            tabIndex={0}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(
+                project.videoStart && project.videoStart > 0
+                  ? `${project.video}${project.video!.includes('?') ? '&' : '?'}t=${project.videoStart}s`
+                  : project.video!,
+                '_blank',
+                'noopener,noreferrer',
+              );
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') e.currentTarget.click();
+            }}
+            className="text-[11px] underline-offset-4 hover:underline cursor-pointer"
             style={{
               color: 'var(--accent)',
               fontFamily: 'var(--font-mono)',
@@ -137,9 +180,10 @@ export default function TiltedProjectCard({ project }: Props) {
             }}
           >
             demo →
-          </a>
+          </span>
         ) : null}
       </div>
     </div>
+    </Link>
   );
 }
