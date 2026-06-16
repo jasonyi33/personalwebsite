@@ -15,6 +15,14 @@ interface Props {
   showBack?: boolean;
 }
 
+function prettyHost(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+}
+
 const PLACEHOLDER_DATA_URL =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
@@ -76,6 +84,20 @@ export default function ProjectDetail({
                 >
                   {project.statusLabel}
                 </span>
+              </>
+            ) : null}
+            {project.live ? (
+              <>
+                <span style={{ color: 'var(--text-faint)' }}>·</span>
+                <a
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] underline-offset-4 hover:underline"
+                  style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}
+                >
+                  {prettyHost(project.live)} ↗
+                </a>
               </>
             ) : null}
           </div>
