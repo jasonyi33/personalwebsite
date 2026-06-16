@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Experience } from 'contentlayer/generated';
 
 interface Props {
@@ -21,9 +22,13 @@ function formatTerm(start: string, end?: string): string {
 export default function ExperienceRow({ experience }: Props) {
   return (
     <li
-      className="grid gap-2 border-t py-5 sm:grid-cols-[180px_1fr] sm:gap-6"
+      className="border-t"
       style={{ borderColor: 'var(--border)' }}
     >
+      <Link
+        href={`/experience/${experience.slug}`}
+        className="grid gap-2 py-5 sm:grid-cols-[180px_1fr] sm:gap-6 hover:opacity-80 transition-opacity"
+      >
       <div className="flex flex-col gap-1">
         <h3
           className="text-[18px] leading-tight font-semibold tracking-tight"
@@ -62,6 +67,7 @@ export default function ExperienceRow({ experience }: Props) {
           </p>
         ) : null}
       </div>
+      </Link>
     </li>
   );
 }
