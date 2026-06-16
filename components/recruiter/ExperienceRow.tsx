@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 import type { Experience } from 'contentlayer/generated';
+import { useNavAnchors } from '@/components/shell/NavAnchorContext';
 
 interface Props {
   experience: Experience;
@@ -20,13 +24,40 @@ function formatTerm(start: string, end?: string): string {
 }
 
 export default function ExperienceRow({ experience }: Props) {
+  const { register, setOriginKey } = useNavAnchors();
+  const linkRef = useRef<HTMLAnchorElement | null>(null);
+  const key = `card:${experience.slug}`;
+
+  useEffect(() => {
+    const sync = () => {
+      const el = linkRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      register(key, {
+        x: r.left + r.width / 2,
+        y: r.top + r.height / 2,
+        w: r.width,
+        h: r.height,
+      });
+    };
+    sync();
+    window.addEventListener('resize', sync);
+    window.addEventListener('scroll', sync, { passive: true });
+    return () => {
+      window.removeEventListener('resize', sync);
+      window.removeEventListener('scroll', sync);
+    };
+  }, [register, key]);
+
   return (
     <li
       className="border-t"
       style={{ borderColor: 'var(--border)' }}
     >
       <Link
+        ref={(el: HTMLAnchorElement | null) => { linkRef.current = el; }}
         href={`/experience/${experience.slug}`}
+        onClick={() => setOriginKey(key)}
         className="grid gap-2 py-5 sm:grid-cols-[180px_1fr] sm:gap-6 hover:opacity-80 transition-opacity"
       >
       <div className="flex flex-col gap-1">
