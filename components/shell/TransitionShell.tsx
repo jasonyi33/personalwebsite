@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useRef } from 'react';
 import { useNavAnchors, type AnchorRect } from './NavAnchorContext';
 
-const DURATION_OUT = 0.18;
-const DURATION_IN = 0.22;
-const SCALE_MIN = 0.86;
+const DURATION_OUT = 0.32;
+const DURATION_IN = 0.5;
+const SCALE_MIN = 0.94;
+const Y_OFFSET = 14;
 
 function originStyle(rect: AnchorRect | undefined): React.CSSProperties {
   if (!rect) return { transformOrigin: '50% 50%' };
@@ -59,29 +60,34 @@ export default function TransitionShell({ children }: { children: React.ReactNod
         initial={{
           opacity: 0,
           scale: SCALE_MIN,
+          y: Y_OFFSET,
           borderRadius: 'var(--window-radius)',
           boxShadow: 'var(--window-shadow)',
         }}
         animate={{
           opacity: 1,
           scale: 1,
+          y: 0,
           borderRadius: '0px',
           boxShadow: '0 0 0 rgba(0,0,0,0)',
           transition: {
             duration: DURATION_IN,
-            ease: [0.22, 1, 0.36, 1],
-            borderRadius: { duration: DURATION_IN * 0.9 },
-            boxShadow: { duration: DURATION_IN * 0.9 },
+            ease: [0.16, 1, 0.3, 1],
+            opacity: { duration: DURATION_IN * 0.6, ease: 'easeOut' },
+            borderRadius: { duration: DURATION_IN * 0.7 },
+            boxShadow: { duration: DURATION_IN * 0.7 },
           },
         }}
         exit={{
           opacity: 0,
           scale: SCALE_MIN,
+          y: -Y_OFFSET * 0.4,
           borderRadius: 'var(--window-radius)',
           boxShadow: 'var(--window-shadow)',
           transition: {
             duration: DURATION_OUT,
-            ease: [0.4, 0, 1, 1],
+            ease: [0.32, 0, 0.67, 0],
+            opacity: { duration: DURATION_OUT * 0.7 },
           },
         }}
       >

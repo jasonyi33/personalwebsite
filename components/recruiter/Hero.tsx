@@ -31,16 +31,11 @@ export default function Hero({ about }: Props) {
       ) : null}
 
       <h1
-        className="text-[44px] leading-[1.05] font-semibold tracking-tight sm:text-[64px]"
+        className="text-[52px] leading-[1.02] sm:text-[80px]"
         style={{
           fontFamily: 'var(--font-display)',
-          background:
-            'linear-gradient(180deg, var(--text) 0%, color-mix(in oklab, var(--text) 60%, var(--accent)) 100%)',
-          WebkitBackgroundClip: 'text',
-          backgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          color: 'transparent',
-          textShadow: '0 0 32px color-mix(in oklab, var(--accent) 18%, transparent)',
+          color: 'var(--text)',
+          letterSpacing: '-0.015em',
         }}
       >
         {about.headline ?? 'I ship AI products end-to-end.'}
