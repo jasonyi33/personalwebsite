@@ -23,7 +23,7 @@ export function GET(): Response {
 
   const items = posts
     .map((p) => {
-      const url = `${SITE.url}/feed#${p.slug}`;
+      const url = `${SITE.url}/writing/${p.slug}`;
       const pubDate = new Date(p.date).toUTCString();
       return [
         '    <item>',

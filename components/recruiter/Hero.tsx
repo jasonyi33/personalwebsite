@@ -35,12 +35,12 @@ export default function Hero({ about }: Props) {
         style={{
           fontFamily: 'var(--font-display)',
           background:
-            'linear-gradient(180deg, var(--text) 0%, color-mix(in oklab, var(--text) 70%, var(--accent)) 100%)',
+            'linear-gradient(180deg, var(--text) 0%, color-mix(in oklab, var(--text) 60%, var(--accent)) 100%)',
           WebkitBackgroundClip: 'text',
           backgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           color: 'transparent',
-          textShadow: '0 0 40px color-mix(in oklab, var(--accent) 30%, transparent)',
+          textShadow: '0 0 32px color-mix(in oklab, var(--accent) 18%, transparent)',
         }}
       >
         {about.headline ?? 'I ship AI products end-to-end.'}
@@ -90,9 +90,9 @@ export default function Hero({ about }: Props) {
             href={`mailto:${email}`}
             className="rounded-full px-5 py-2.5 text-[14px] font-medium transition-transform hover:-translate-y-0.5"
             style={{
-              color: '#0a0a0a',
+              color: '#ffffff',
               background: 'var(--accent)',
-              boxShadow: '0 6px 24px color-mix(in oklab, var(--accent) 35%, transparent)',
+              boxShadow: '0 6px 24px color-mix(in oklab, var(--accent) 28%, transparent)',
             }}
           >
             Email me
