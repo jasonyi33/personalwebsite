@@ -74,6 +74,7 @@ export default function TopNav() {
                   }}
                   href={t.href}
                   onClick={() => setOriginKey(t.href)}
+                  aria-current={active ? 'page' : undefined}
                   className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[12px] tracking-[0.04em] transition-colors sm:text-[13px]"
                   style={{
                     color: active ? 'var(--accent)' : 'var(--text-dim)',
