@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
-import { AudioProvider } from "@/components/os/AudioProvider";
-import { ThemeProvider } from "@/components/os/ThemeProvider";
 import { SITE } from "@/lib/seo";
 import "./globals.css";
 
@@ -73,18 +71,6 @@ export const viewport: Viewport = {
   themeColor: SITE.themeColor,
 };
 
-const themeBootstrap = `
-(function() {
-  try {
-    var stored = localStorage.getItem('theme');
-    var preferred = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', preferred);
-  } catch (e) {
-    document.documentElement.setAttribute('data-theme', 'light');
-  }
-})();
-`;
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -93,17 +79,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="light"
-      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
-      </head>
       <body className="min-h-full flex flex-col">
-        <ThemeProvider>
-          <AudioProvider>{children}</AudioProvider>
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );

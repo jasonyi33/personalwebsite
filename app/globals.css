@@ -1,37 +1,32 @@
 @import "tailwindcss";
 
-:root,
-[data-theme="dark"] {
-  /* Modern dark palette (Linear / Raycast / Vercel reference) */
-  --bg:           #0a0a0b;
-  --surface:      rgba(20, 20, 22, 0.72);
-  --surface-2:    rgba(28, 28, 30, 0.85);
-  --border:       rgba(255, 255, 255, 0.08);
-  --border-2:     rgba(255, 255, 255, 0.14);
-  --text:         #ededed;
-  --text-dim:     #8b8b92;
-  --text-faint:   #5a5a60;
-  --accent:       #7dd3fc;
-  --accent-2:     rgba(125, 211, 252, 0.18);
+:root {
+  /* Warm-light palette */
+  --bg:           #faf7f2;   /* warm cream */
+  --surface:      rgba(255, 252, 246, 0.85);
+  --surface-2:    rgba(255, 252, 246, 0.95);
+  --border:       rgba(28, 22, 14, 0.10);
+  --border-2:     rgba(28, 22, 14, 0.16);
+  --text:         #1a1410;
+  --text-dim:     #6b5e52;
+  --text-faint:   #a39687;
 
-  /* Status colors (status dots only — used sparingly) */
-  --status-live:  #4ade80;
-  --status-wip:   #fbbf24;
-  --status-arch:  #71717a;
+  /* Warm amber accent */
+  --accent:       #b8521a;
+  --accent-2:     rgba(184, 82, 26, 0.14);
+  --accent-dim:   rgba(184, 82, 26, 0.55);
 
-  /* Window controls (macOS traffic lights) */
-  --tl-red:       #ff5f57;
-  --tl-yellow:    #febc2e;
-  --tl-green:     #28c840;
+  /* Status (kept for project status dots) */
+  --status-live:  #2f7d3a;
+  --status-wip:   #b88412;
+  --status-arch:  #7a6e62;
 
-  /* Wallpaper mesh gradient blobs */
-  --mesh-a:       #1a1a3e;
-  --mesh-b:       #2d1b4d;
-  --mesh-c:       #0a1530;
+  /* Transition chrome: shadow + radius used by motion.main during route change */
+  --window-shadow: 0 24px 60px -20px rgba(28, 22, 14, 0.28),
+                   0 10px 24px -12px rgba(28, 22, 14, 0.18);
+  --window-radius: 18px;
 
-  --intro-halo:   rgba(255,255,255,0.05);
-
-  /* Legacy --nerv-* aliases so untouched files keep compiling. */
+  /* Legacy --nerv-* aliases — deleted in Phase 7 with the OS files. */
   --nerv-space:       var(--bg);
   --nerv-void:        var(--bg);
   --nerv-panel:       var(--surface);
@@ -39,48 +34,7 @@
   --nerv-grid:        var(--border);
   --nerv-cyan:        var(--accent);
   --nerv-cyan-dim:    var(--text-dim);
-  --nerv-red:         var(--tl-red);
-  --nerv-amber:       var(--text-dim);
-  --nerv-warn:        var(--text-dim);
-  --nerv-green:       var(--status-live);
-  --nerv-bone:        var(--text);
-  --nerv-bone-dim:    var(--text-dim);
-}
-
-[data-theme="light"] {
-  --bg:           #fafaf9;
-  --surface:      rgba(255, 255, 255, 0.7);
-  --surface-2:    rgba(255, 255, 255, 0.92);
-  --border:       rgba(0, 0, 0, 0.08);
-  --border-2:     rgba(0, 0, 0, 0.14);
-  --text:         #1a1a1a;
-  --text-dim:     #6b6b6b;
-  --text-faint:   #a0a0a0;
-  --accent:       #0284c7;
-  --accent-2:     rgba(2, 132, 199, 0.14);
-
-  --status-live:  #16a34a;
-  --status-wip:   #d97706;
-  --status-arch:  #71717a;
-
-  --tl-red:       #ff5f57;
-  --tl-yellow:    #febc2e;
-  --tl-green:     #28c840;
-
-  --mesh-a:       #fde2d2;
-  --mesh-b:       #e6d4f5;
-  --mesh-c:       #fef3c7;
-
-  --intro-halo:   rgba(0,0,0,0.04);
-
-  --nerv-space:       var(--bg);
-  --nerv-void:        var(--bg);
-  --nerv-panel:       var(--surface);
-  --nerv-panel-edge:  var(--border);
-  --nerv-grid:        var(--border);
-  --nerv-cyan:        var(--accent);
-  --nerv-cyan-dim:    var(--text-dim);
-  --nerv-red:         var(--tl-red);
+  --nerv-red:         var(--accent);
   --nerv-amber:       var(--text-dim);
   --nerv-warn:        var(--text-dim);
   --nerv-green:       var(--status-live);
@@ -101,42 +55,15 @@
   --font-display: var(--font-display);
 }
 
-html,
-body {
+html, body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 body {
-  position: relative;
-  isolation: isolate;
   min-height: 100vh;
   overflow-x: hidden;
-}
-
-/* Mesh-gradient wallpaper: three drifting blobs over the base color. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(at 18% 22%, var(--mesh-a) 0%, transparent 42%),
-    radial-gradient(at 82% 18%, var(--mesh-b) 0%, transparent 45%),
-    radial-gradient(at 50% 88%, var(--mesh-c) 0%, transparent 48%),
-    var(--bg);
-  background-size: 140% 140%;
-  background-position: 0% 0%;
-  animation: mesh-drift 30s ease-in-out infinite alternate;
-  filter: saturate(1.05);
-}
-
-@keyframes mesh-drift {
-  0%   { background-position:   0%   0%,  100%   0%,  50% 100%; }
-  50%  { background-position:  20%  10%,   80%  20%,  60%  80%; }
-  100% { background-position:  10%  20%,   90%  10%,  40%  90%; }
 }
 
 @keyframes pulse-dot {
@@ -149,15 +76,10 @@ body::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0ms !important;
-  }
-  body::before {
-    animation: none !important;
   }
 }
 
