@@ -1,0 +1,84 @@
+---
+title: "Leadrin"
+slug: "leadrin"
+tagline: "Customer engagement and sales-agent automation for car dealerships"
+status: "live"
+statusLabel: "Currently building"
+outcomeChip: "Mar 2026 → present"
+featured: true
+year: 2026
+tags: ["sales-automation", "ai-agents", "sms", "dealership", "playwright", "nextjs", "postgres", "langchain", "rag", "voice-ai"]
+live: "https://leadrin.com"
+order: 0
+---
+
+Leadrin is a customer engagement platform for car dealerships. The product
+has two halves that share one fact base: a buyer-facing **Customer Page**
+that turns a sales lead into one inspectable place to verify the vehicle and
+contact the salesperson, and a **Sales Agent** that handles SMS follow-up
+inside DealerCenter — the dealership's CRM — without taking the salesperson
+out of the loop.
+
+`problem`
+
+A dealership lead has a half-life measured in minutes. The slow first
+response, the lost-in-the-feed inquiry, the salesperson buried under thirty
+other threads — that's where leads die. Existing CRMs are dashboards: they
+don't reply, they don't book, and they don't ground anything in the actual
+car. Buyers, meanwhile, get generic "thanks for your interest" templates
+that don't tell them whether the car is still there, what it costs, or who
+they'd be working with.
+
+`approach`
+
+Two products glued together by one fact base.
+
+- **Customer Pages** are fact-first vehicle research packs. One page per
+  lead. Sourced VIN/inventory facts, real photos with quality filtering,
+  the salesperson's identity and intro video, a direct path to chat or
+  book. The page is the artifact the agent delivers and references.
+- **Sales Agent** lives in DealerCenter SMS. A Playwright browser session
+  opens the dealership's own CRM thread, scrapes replies, drafts grounded
+  responses against the Customer Page's Vehicle Proof, and books
+  appointments only when the buyer confirms an offered slot. It hands off
+  silently to a salesperson the moment the conversation enters
+  negotiation, legal claims, or off-script territory.
+- **Workflow modes** — `manual`, `auto`, `agent` — let dealerships start
+  conservative and graduate into automation at their own pace.
+
+`trade-offs`
+
+- **Send through DealerCenter, not Leadrin's own A2P.** Outreach lands in
+  the dealership's native CRM thread so logging, history, and compliance
+  stay where the salesperson already lives. Cost: we're operating someone
+  else's UI through a browser agent, which is brittle. Benefit: no
+  parallel thread for the buyer to ignore.
+- **Grounded conversation only.** Every vehicle fact, price claim, or
+  dealership claim must come from sourced page facts. The agent can be
+  conversational, but it cannot invent. When it can't ground something,
+  it hands off. Trade: less surface area, more trust.
+- **Conservative live rollout.** First live pilot is a single salesperson
+  at a single dealer, three-touch sequence (initial page, same-day
+  check-in, next-day ask), then stop. Trade: slower scale, but the agent
+  learns where the real handoff edges are before it touches a wider
+  population.
+- **Humans close in person.** The agent gets the buyer informed and
+  booked; the salesperson records personal media when useful, handles
+  handoffs, and shows up to the appointment. We're not trying to remove
+  the salesperson — we're trying to give them their morning back.
+
+`status`
+
+Live with the first pilot dealer (June 2026 launch). Active build:
+expanding workflow-mode coverage, hardening DealerCenter Sync, extending
+Customer Page evidence sections, and proving out the shadow-then-live
+path before we widen the salesperson allowlist.
+
+`what i'm learning`
+
+The hard part isn't the LLM. It's the *integration surface* — DealerCenter
+isn't an API, it's a CRM UI. Most engineering hours go into the
+scrape/send contract, recovery from session changes, and stage-write
+idempotency. The agent is only as good as the page it grounds in, and the
+page is only as good as the inventory data feeding it. Most of the value
+shows up in the boring layers underneath.
