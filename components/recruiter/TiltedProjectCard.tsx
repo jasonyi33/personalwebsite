@@ -158,6 +158,7 @@ export default function TiltedProjectCard({ project }: Props) {
           <span
             role="link"
             tabIndex={0}
+            aria-label={`Watch ${project.title} demo`}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();

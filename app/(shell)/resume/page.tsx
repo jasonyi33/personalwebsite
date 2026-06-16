@@ -1,6 +1,7 @@
 // TODO: public/resume.pdf is missing. The Download PDF button currently 404s.
 //   Add the PDF to public/ before publishing.
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { getAbout, sortedExperiences, sortedProjects } from '@/lib/content';
 
 export const metadata: Metadata = {
@@ -151,9 +152,9 @@ export default function ResumePage() {
             >
               Download PDF
             </a>
-            <a href="/" style={btnStyle({ filled: false })}>
+            <Link href="/" style={btnStyle({ filled: false })}>
               ← Site
-            </a>
+            </Link>
           </nav>
         </header>
 
