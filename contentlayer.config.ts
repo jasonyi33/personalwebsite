@@ -39,10 +39,8 @@ export const Project = defineDocumentType(() => ({
     statusLabel: { type: 'string' },
     /** Short outcome chip for the projects window (e.g. "1st · SF10x"). */
     outcomeChip: { type: 'string' },
-    /** If true, render this project as the wide featured card. */
+    /** If true, surface on the homepage as a featured highlight. */
     featured: { type: 'boolean', default: false },
-    /** If true, surface on /recruiter. */
-    recruiterPick: { type: 'boolean', default: false },
     year: { type: 'number', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     cover: { type: 'string' },
@@ -76,8 +74,8 @@ export const Experience = defineDocumentType(() => ({
     summary: { type: 'string' },
     bullets: { type: 'list', of: { type: 'string' }, default: [] },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
-    /** If true, surface on /recruiter. */
-    recruiterPick: { type: 'boolean', default: false },
+    /** If true, surface on the homepage as a featured highlight. */
+    featured: { type: 'boolean', default: false },
     order: { type: 'number', default: 999 },
   },
   computedFields: {
@@ -98,7 +96,7 @@ export const Post = defineDocumentType(() => ({
     draft: { type: 'boolean', default: false },
   },
   computedFields: {
-    url: { type: 'string', resolve: (doc) => `/feed#${doc.slug}` },
+    url: { type: 'string', resolve: (doc) => `/writing/${doc.slug}` },
     readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
     year: { type: 'number', resolve: (doc) => new Date(doc.date).getFullYear() },
   },

@@ -31,8 +31,8 @@ export const sortedExperiences = () =>
       return b.start.localeCompare(a.start);
     });
 
-export const recruiterProjects = () =>
-  sortedProjects().filter((p) => p.recruiterPick);
+export const featuredProjects = () =>
+  sortedProjects().filter((p) => p.featured);
 
-export const recruiterExperiences = () =>
-  sortedExperiences().filter((e) => e.recruiterPick);
+export const featuredExperiences = () =>
+  sortedExperiences().filter((e) => e.featured);

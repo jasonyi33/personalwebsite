@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   getAbout,
-  recruiterExperiences,
-  recruiterProjects,
+  featuredExperiences,
+  featuredProjects,
 } from '@/lib/content';
 import Hero from '@/components/recruiter/Hero';
 import ContactCard from '@/components/recruiter/ContactCard';
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 
 export default function RecruiterPage() {
   const about = getAbout();
-  const projects = recruiterProjects();
-  const experiences = recruiterExperiences();
+  const projects = featuredProjects();
+  const experiences = featuredExperiences();
 
   return (
     <main
