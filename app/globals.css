@@ -21,6 +21,12 @@
   --status-wip:   #b88412;
   --status-arch:  #7a6e62;
 
+  /* Legacy OS-shell tokens — kept until OS files are deleted in Phase 7. */
+  --tl-red:       #ff5f57;
+  --tl-yellow:    #febc2e;
+  --tl-green:     #28c840;
+  --intro-halo:   rgba(0, 0, 0, 0.04);
+
   /* Transition chrome: shadow + radius used by motion.main during route change */
   --window-shadow: 0 24px 60px -20px rgba(28, 22, 14, 0.28),
                    0 10px 24px -12px rgba(28, 22, 14, 0.18);
