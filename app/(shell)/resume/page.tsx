@@ -1,3 +1,5 @@
+// TODO: public/resume.pdf is missing. The Download PDF button currently 404s.
+//   Add the PDF to public/ before publishing.
 import type { Metadata } from 'next';
 import { getAbout, sortedExperiences, sortedProjects } from '@/lib/content';
 
@@ -68,8 +70,8 @@ export default function ResumePage() {
   return (
     <main
       style={{
-        background: '#ffffff',
-        color: '#111827',
+        background: 'var(--bg)',
+        color: 'var(--text)',
         minHeight: '100vh',
         fontFamily: 'var(--font-sans), ui-sans-serif, system-ui, sans-serif',
       }}
@@ -99,6 +101,7 @@ export default function ResumePage() {
                 letterSpacing: '-0.02em',
                 lineHeight: 1.05,
                 margin: 0,
+                color: 'var(--text)',
               }}
             >
               {about.name}
@@ -107,7 +110,7 @@ export default function ResumePage() {
               style={{
                 marginTop: 4,
                 fontSize: 14,
-                color: '#4b5563',
+                color: 'var(--text-dim)',
               }}
             >
               AI Product Engineer · UC Berkeley EECS · {about.location}
@@ -116,7 +119,7 @@ export default function ResumePage() {
               style={{
                 marginTop: 4,
                 fontSize: 13,
-                color: '#4b5563',
+                color: 'var(--text-dim)',
               }}
             >
               <a href={`mailto:${about.email ?? 'jasonyi2023@gmail.com'}`} style={linkStyle}>
@@ -177,7 +180,7 @@ export default function ResumePage() {
                     marginTop: 6,
                     marginLeft: 18,
                     fontSize: 13,
-                    color: '#1f2937',
+                    color: 'var(--text)',
                     listStyle: 'disc',
                   }}
                 >
@@ -193,7 +196,7 @@ export default function ResumePage() {
                   style={{
                     marginTop: 4,
                     fontSize: 11,
-                    color: '#6b7280',
+                    color: 'var(--text-faint)',
                     fontFamily: 'var(--font-mono), ui-monospace, monospace',
                   }}
                 >
@@ -216,7 +219,7 @@ export default function ResumePage() {
                   style={{
                     marginTop: 2,
                     fontSize: 11,
-                    color: '#6b7280',
+                    color: 'var(--text-faint)',
                     fontFamily: 'var(--font-mono), ui-monospace, monospace',
                   }}
                 >
@@ -241,12 +244,12 @@ export default function ResumePage() {
         <Section title="Skills">
           <ul style={{ display: 'grid', gap: 6, listStyle: 'none', padding: 0 }}>
             {SKILLS.map((s) => (
-              <li key={s.group} style={{ fontSize: 13, color: '#1f2937' }}>
+              <li key={s.group} style={{ fontSize: 13, color: 'var(--text)' }}>
                 <span
                   style={{
                     display: 'inline-block',
                     width: 96,
-                    color: '#6b7280',
+                    color: 'var(--text-faint)',
                     fontFamily: 'var(--font-mono), ui-monospace, monospace',
                     fontSize: 11,
                     textTransform: 'lowercase',
@@ -263,7 +266,7 @@ export default function ResumePage() {
 
       <style>{`
         .resume-root a { text-decoration: underline; text-underline-offset: 2px; }
-        .resume-root a:hover { color: #0284c7; }
+        .resume-root a:hover { color: var(--accent); }
         @media print {
           .resume-actions { display: none !important; }
           .resume-root { padding: 0 !important; max-width: none !important; }
@@ -275,7 +278,7 @@ export default function ResumePage() {
 }
 
 const linkStyle: React.CSSProperties = {
-  color: '#1f2937',
+  color: 'var(--text)',
 };
 
 function btnStyle({ filled }: { filled: boolean }): React.CSSProperties {
@@ -285,9 +288,9 @@ function btnStyle({ filled }: { filled: boolean }): React.CSSProperties {
     padding: '7px 12px',
     fontSize: 12,
     borderRadius: 6,
-    border: `1px solid ${filled ? '#111827' : '#d1d5db'}`,
-    background: filled ? '#111827' : '#ffffff',
-    color: filled ? '#ffffff' : '#111827',
+    border: `1px solid ${filled ? 'var(--accent)' : 'var(--border-2)'}`,
+    background: filled ? 'var(--accent)' : 'transparent',
+    color: filled ? '#ffffff' : 'var(--text)',
     textDecoration: 'none',
     fontFamily: 'var(--font-mono), ui-monospace, monospace',
   };
@@ -300,12 +303,12 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         style={{
           fontSize: 11,
           letterSpacing: '0.18em',
-          color: '#6b7280',
+          color: 'var(--text-faint)',
           fontFamily: 'var(--font-mono), ui-monospace, monospace',
           textTransform: 'uppercase',
           marginBottom: 10,
           paddingBottom: 6,
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: '1px solid var(--border)',
         }}
       >
         {title}
@@ -326,12 +329,12 @@ function Row({ left, right, sub }: { left: string; right?: string; sub?: string 
           gap: 12,
         }}
       >
-        <span style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{left}</span>
+        <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{left}</span>
         {right ? (
           <span
             style={{
               fontSize: 11,
-              color: '#6b7280',
+              color: 'var(--text-faint)',
               fontFamily: 'var(--font-mono), ui-monospace, monospace',
               whiteSpace: 'nowrap',
             }}
@@ -341,7 +344,7 @@ function Row({ left, right, sub }: { left: string; right?: string; sub?: string 
         ) : null}
       </div>
       {sub ? (
-        <p style={{ marginTop: 2, fontSize: 13, color: '#4b5563', lineHeight: 1.55 }}>{sub}</p>
+        <p style={{ marginTop: 2, fontSize: 13, color: 'var(--text-dim)', lineHeight: 1.55 }}>{sub}</p>
       ) : null}
     </div>
   );
