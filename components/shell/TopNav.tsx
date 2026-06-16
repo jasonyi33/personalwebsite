@@ -56,7 +56,7 @@ export default function TopNav() {
           ref={wordmarkRef}
           href="/"
           onClick={() => setOriginKey('/')}
-          className="text-[14px] font-semibold tracking-[0.04em] uppercase"
+          className="text-[20px] italic"
           style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
         >
           Jason Yi
