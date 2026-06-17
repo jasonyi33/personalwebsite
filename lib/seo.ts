@@ -6,11 +6,11 @@
 export const SITE = {
   name: 'Jason Yi · AI Product Engineer',
   description:
-    'AI Product Engineer at UC Berkeley EECS. Voice interfaces, knowledge graphs, agentic software. Prev: TikTok, Google. 1st @ SF10x, presented at OpenAI DevDay.',
+    'Building agents for real businesses. Founder of VoiceReach (voice agents, backed by OpenAI), now building Leadrin. Prev: TikTok, Adobe, Google. Berkeley EECS.',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://jasonyi.live',
   twitter: '@jasonyi361',
   themeColor: '#7dd3fc',
-  tagline: 'I ship AI products end-to-end.',
+  tagline: 'Building agents for real businesses.',
 } as const;
 
 export type SiteConfig = typeof SITE;

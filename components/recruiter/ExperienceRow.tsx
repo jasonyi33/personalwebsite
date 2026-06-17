@@ -58,7 +58,7 @@ export default function ExperienceRow({ experience }: Props) {
         ref={(el: HTMLAnchorElement | null) => { linkRef.current = el; }}
         href={`/experience/${experience.slug}`}
         onClick={() => setOriginKey(key)}
-        className="grid gap-2 py-5 sm:grid-cols-[180px_1fr] sm:gap-6 hover:opacity-80 transition-opacity"
+        className="group grid gap-2 py-5 sm:grid-cols-[180px_1fr] sm:gap-6"
       >
       <div className="flex flex-col gap-1">
         <h3
@@ -91,12 +91,19 @@ export default function ExperienceRow({ experience }: Props) {
         </p>
         {experience.summary ? (
           <p
-            className="text-[13.5px] leading-[1.6]"
+            className="text-[13.5px] leading-[1.6] transition-colors group-hover:text-[var(--text)]"
             style={{ color: 'var(--text-dim)' }}
           >
             {experience.summary}
           </p>
         ) : null}
+        <span
+          className="mt-1 inline-flex items-center gap-1 text-[10px] tracking-[0.14em] uppercase transition-colors group-hover:text-[var(--accent)]"
+          style={{ color: 'var(--text-faint)', fontFamily: 'var(--font-mono)' }}
+        >
+          View experience
+          <span className="transition-transform group-hover:translate-x-1">→</span>
+        </span>
       </div>
       </Link>
     </li>

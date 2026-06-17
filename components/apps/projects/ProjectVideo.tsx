@@ -11,7 +11,7 @@ interface Props {
 }
 
 interface ParsedVideo {
-  kind: 'youtube' | 'vimeo' | 'file';
+  kind: 'youtube' | 'vimeo' | 'gdrive' | 'file';
   id: string;
 }
 
@@ -20,6 +20,11 @@ function parseVideo(src: string): ParsedVideo | null {
     const url = new URL(src);
     const host = url.hostname.replace(/^www\./, '');
 
+    if (host === 'drive.google.com') {
+      const fileMatch = url.pathname.match(/\/file\/d\/([^/]+)/);
+      const id = fileMatch ? fileMatch[1] : url.searchParams.get('id');
+      return id ? { kind: 'gdrive', id } : null;
+    }
     if (host === 'youtu.be') {
       const id = url.pathname.slice(1);
       return id ? { kind: 'youtube', id } : null;
@@ -132,6 +137,27 @@ export default function ProjectVideo({ src, poster, startSeconds = 0, title }: P
           src={`https://www.youtube-nocookie.com/embed/${parsed.id}?${params.toString()}`}
           title={`${title} video`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full"
+        />
+      </div>
+    );
+  }
+
+  if (parsed.kind === 'gdrive') {
+    return (
+      <div
+        className="relative mb-6 w-full overflow-hidden rounded-lg"
+        style={{
+          aspectRatio: '16 / 9',
+          background: '#000',
+          border: '1px solid var(--border)',
+        }}
+      >
+        <iframe
+          src={`https://drive.google.com/file/d/${parsed.id}/preview`}
+          title={`${title} video`}
+          allow="autoplay; fullscreen"
           allowFullScreen
           className="absolute inset-0 h-full w-full"
         />

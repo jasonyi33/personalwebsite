@@ -1,0 +1,49 @@
+---
+title: "HelixChain"
+slug: "helixchain"
+tagline: "Zero-knowledge genomic privacy for healthcare"
+status: "archived"
+statusLabel: "Hackathon Project"
+outcomeChip: "1st @ MLH x Midnight Hackathon"
+featured: false
+year: 2025
+tags: ["zk-proofs", "blockchain", "healthcare", "genomics", "privacy", "react", "typescript", "halo2", "ipfs", "midnight"]
+cover: "/projects/helixchain/cover.png"
+video: "https://www.youtube.com/watch?v=oODFo9QijSs"
+videoPoster: "/projects/helixchain/cover.png"
+videoStart: 0
+live: "https://devpost.com/software/helixchain"
+repo: "https://github.com/jasonyi33/midnight_hackathon"
+order: 5
+---
+
+HelixChain is a blockchain platform that lets patients prove genetic traits
+cryptographically without ever exposing their full genomic sequence. Personalized
+medicine depends on sensitive markers — BRCA1/2 for cancer risk, CYP2D6 for drug
+metabolism — but sharing a raw genome to verify a single variant is a permanent,
+irreversible privacy loss. HelixChain replaces "hand over your DNA" with
+"prove the one fact that matters."
+
+`how it works`
+
+Patients upload encrypted variant data to IPFS and generate zero-knowledge
+proofs for specific genetic markers that doctors can verify on-chain — without
+the underlying sequence ever leaving the patient's control. Researchers query
+aggregated mutation data for studies while individual privacy stays absolute.
+Three portals serve patients, healthcare providers, and researchers, with
+real-time updates over WebSockets.
+
+`how it was built`
+
+A 4-person team split the work: the patient portal and wallet integration in
+React/TypeScript, the doctor and researcher portals with Recharts and Three.js
+visualizations, an Express backend with a Bull/Redis proof-generation queue,
+and the zero-knowledge circuits written in the Compact language on the Halo2
+proving system. The platform runs on Midnight, with Lace wallet for on-chain
+identity and Pinata/IPFS for encrypted off-chain storage.
+
+`outcome`
+
+HelixChain won 1st place at the MLH x Midnight Hackathon, recognized for
+applying zero-knowledge proofs to a real and unsolved privacy problem in
+genomic medicine.

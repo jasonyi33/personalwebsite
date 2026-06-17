@@ -97,7 +97,7 @@ export default async function Image() {
               fontWeight: 500,
             }}
           >
-            AI Product Engineer · Berkeley EECS
+            Building agents for real businesses.
           </div>
           <div
             style={{
@@ -108,7 +108,7 @@ export default async function Image() {
               marginTop: 8,
             }}
           >
-            I ship AI products end-to-end. Prev: TikTok, Google · 1st @ SF10x → OpenAI DevDay
+            Founder @ VoiceReach (backed by OpenAI) · Prev TikTok, Adobe, Google · Berkeley EECS
           </div>
         </div>
 

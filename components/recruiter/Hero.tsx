@@ -9,11 +9,11 @@ export default function Hero({ about }: Props) {
   const linkByLabel = (label: string) =>
     about.links?.find((l) => l.label.toLowerCase() === label.toLowerCase())?.url;
   const linkedIn = linkByLabel('LinkedIn');
+  const github = linkByLabel('GitHub');
   const email = about.email;
 
   const fastFacts = [
-    `Berkeley EECS`,
-    about.gradTerm ? `graduating ${about.gradTerm}` : null,
+    `EECS @ UC Berkeley`,
     about.openTo ? `open to ${about.openTo}` : null,
   ]
     .filter(Boolean)
@@ -112,6 +112,17 @@ export default function Hero({ about }: Props) {
             style={{ color: 'var(--text-dim)' }}
           >
             LinkedIn →
+          </a>
+        ) : null}
+        {github ? (
+          <a
+            href={github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[14px] underline-offset-4 hover:underline"
+            style={{ color: 'var(--text-dim)' }}
+          >
+            GitHub →
           </a>
         ) : null}
       </div>
