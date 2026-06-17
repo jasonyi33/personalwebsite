@@ -25,7 +25,7 @@ export default function WritingPage() {
       </h1>
 
       {posts.length === 0 ? (
-        <p style={{ color: 'var(--text-dim)' }}>Nothing here yet.</p>
+        <p style={{ color: 'var(--text-dim)' }}>Coming soon.</p>
       ) : (
         <ul className="divide-y" style={{ borderColor: 'var(--border)' }}>
           {posts.map((p) => (
