@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   getAbout,
@@ -9,10 +8,6 @@ import Hero from '@/components/recruiter/Hero';
 import ContactCard from '@/components/recruiter/ContactCard';
 import TiltedProjectCard from '@/components/recruiter/TiltedProjectCard';
 import ExperienceRow from '@/components/recruiter/ExperienceRow';
-
-export const metadata: Metadata = {
-  title: 'Jason Yi | AI Product Engineer',
-};
 
 export default function HomePage() {
   const about = getAbout();

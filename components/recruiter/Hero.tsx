@@ -12,23 +12,27 @@ export default function Hero({ about }: Props) {
   const github = linkByLabel('GitHub');
   const email = about.email;
 
-  const fastFacts = [
-    `EECS @ UC Berkeley`,
-    about.openTo ? `open to ${about.openTo}` : null,
-  ]
-    .filter(Boolean)
-    .join(' · ');
+  const fastFacts = 'EECS @ UC Berkeley';
+  const lastUpdated = new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <section className="mx-auto w-full max-w-[760px] px-6 pt-24 pb-12 sm:pt-32">
-      {fastFacts ? (
-        <p
-          className="mb-5 text-[11px] tracking-[0.18em] uppercase"
-          style={{ color: 'var(--text-faint)', fontFamily: 'var(--font-mono)' }}
+      <p
+        className="mb-5 flex flex-wrap items-baseline gap-x-2 text-[11px] tracking-[0.18em] uppercase"
+        style={{ color: 'var(--text-faint)', fontFamily: 'var(--font-mono)' }}
+      >
+        <span>{fastFacts}</span>
+        <span aria-hidden>·</span>
+        <span
+          className="text-[14px] tracking-normal normal-case italic"
+          style={{ fontFamily: 'var(--font-display)' }}
         >
-          {fastFacts}
-        </p>
-      ) : null}
+          Last updated {lastUpdated}
+        </span>
+      </p>
 
       <h1
         className="text-[52px] leading-[1.02] sm:text-[80px]"

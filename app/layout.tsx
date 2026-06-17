@@ -26,8 +26,8 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: SITE.name,
-    template: `%s · ${SITE.name}`,
+    default: 'Jason Yi',
+    template: '%s · Jason Yi',
   },
   description: SITE.description,
   applicationName: SITE.name,
