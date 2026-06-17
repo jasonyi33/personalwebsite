@@ -6,6 +6,7 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import type { Project } from 'contentlayer/generated';
 import { MDXComponents } from '@/components/mdx/MDXComponents';
 import ProjectVideo from './ProjectVideo';
+import LiveSiteEmbed from './LiveSiteEmbed';
 
 interface Props {
   project: Project;
@@ -120,7 +121,9 @@ export default function ProjectDetail({
           )}
         </header>
 
-        {project.video ? (
+        {project.embed ? (
+          <LiveSiteEmbed url={project.embed} title={project.title} />
+        ) : project.video ? (
           <ProjectVideo
             src={project.video}
             poster={project.videoPoster ?? project.cover}

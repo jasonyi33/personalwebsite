@@ -51,6 +51,8 @@ export const Project = defineDocumentType(() => ({
     /** Start time in seconds. Applied on play. */
     videoStart: { type: 'number', default: 0 },
     live: { type: 'string' },
+    /** Optional live site URL embedded interactively at the top of the detail view. Takes precedence over video/cover. */
+    embed: { type: 'string' },
     repo: { type: 'string' },
     order: { type: 'number', default: 999 },
   },
