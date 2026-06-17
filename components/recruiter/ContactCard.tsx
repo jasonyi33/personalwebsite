@@ -43,7 +43,7 @@ export default function ContactCard({ about }: Props) {
           className="mt-3 text-[14.5px] leading-[1.6] sm:text-[15.5px]"
           style={{ color: 'var(--text-dim)' }}
         >
-          Open to AI engineering roles &mdash; internship + new grad. Best by email.
+          Open to AI engineering roles for new grad and internship. Best by email.
         </p>
 
         {about.availability ? (
