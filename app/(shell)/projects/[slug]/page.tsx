@@ -17,8 +17,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = sortedProjects().find((p) => p.slug === slug);
-  if (!project) return { title: `NOT FOUND | ${SITE.name}` };
-  const title = `${project.title} | ${SITE.name}`;
+  if (!project) return { title: 'Not found' };
+  // Document <title> uses the layout template ("%s · Jason Yi").
+  const title = project.title;
+  // Social cards can't use the template, so spell out the suffix.
+  const socialTitle = `${project.title} · ${SITE.name}`;
   const description = project.tagline;
   const url = `${SITE.url}/projects/${project.slug}`;
   return {
@@ -26,7 +29,7 @@ export async function generateMetadata({
     description,
     alternates: { canonical: url },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url,
       type: 'article',
@@ -34,7 +37,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: socialTitle,
       description,
       creator: SITE.twitter,
     },

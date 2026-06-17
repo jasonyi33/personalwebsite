@@ -116,7 +116,7 @@ export const About = defineDocumentType(() => ({
     location: { type: 'string', required: true },
     email: { type: 'string' },
     links: { type: 'list', of: Link, default: [] },
-    /** Eyebrow above the headline, e.g. "BERKELEY EECS · AI PRODUCT ENGINEER". */
+    /** Eyebrow above the headline, e.g. "EECS @ UC BERKELEY". */
     eyebrow: { type: 'string' },
     /** Big claim line, e.g. "I ship AI products end-to-end." */
     headline: { type: 'string' },

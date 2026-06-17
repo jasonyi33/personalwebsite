@@ -35,7 +35,6 @@ export const metadata: Metadata = {
   creator: 'Jason Yi',
   keywords: [
     'Jason Yi',
-    'AI Product Engineer',
     'UC Berkeley EECS',
     'voice AI',
     'agentic software',

@@ -5,7 +5,7 @@
  */
 
 export const SITE = {
-  name: 'Jason Yi · AI Product Engineer',
+  name: 'Jason Yi',
   description:
     'Building agents for real businesses. Founder of VoiceReach (voice agents, backed by OpenAI), now building Leadrin. Prev: TikTok, Adobe, Google. Berkeley EECS.',
   url: 'https://www.jasonyi.ai',
