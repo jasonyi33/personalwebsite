@@ -18,7 +18,7 @@ order: 1
 
 VoiceReach is a mobile AI platform for homeless outreach workers in San
 Francisco. Outreach is a deeply human job that, by city policy, also produces
-a large amount of structured paperwork — encounter logs, demographic intake,
+a large amount of structured paperwork: encounter logs, demographic intake,
 referral records, follow-up flags. The status quo was a clipboard or a typed
 form back at the office, hours after the conversation happened. VoiceReach
 replaces that with a voice-first phone app: speak the encounter, the system
@@ -30,7 +30,7 @@ record while the worker is still in the field.
 Outreach workers spend a meaningful fraction of their week on documentation
 that can't easily be done in the moment. They're standing on a sidewalk,
 hands full, holding a conversation that has to take priority over a form. The
-real cost isn't the typing — it's the *recall loss* between the encounter and
+real cost isn't the typing. It's the *recall loss* between the encounter and
 when they finally sit down to write it up. Programs lose detail, downstream
 case managers lose context, and city dashboards lose accuracy.
 
@@ -59,8 +59,8 @@ Workers narrate freely; the system handles the rest.
   When extraction is uncertain, the worker sees an inline confirm-or-edit
   surface instead of silent failure.
 - **GPS + consent-based photo capture**: location and optional photo are
-  attached to each encounter. The consent flow is explicit and reversible —
-  more on that below.
+  attached to each encounter. The consent flow is explicit and reversible.
+  More on that below.
 - **FastAPI + Postgres**: a small typed API. Encounters, people (loosely
   linked, not deduplicated to a strict identity), referrals, and an audit
   log live in Postgres; the schema mirrors the city's reporting requirements.
@@ -70,7 +70,7 @@ Workers narrate freely; the system handles the rest.
 A few decisions had real cost on the other side.
 
 - **Latency vs. accuracy on transcription.** Whisper is slower than smaller
-  ASR. We accepted ~2–4s of transcription latency in exchange for output
+  ASR. We accepted ~2-4s of transcription latency in exchange for output
   workers actually trust. A faster, lower-quality model would have meant
   workers re-typing, which defeats the point.
 - **Cloud-first, not on-device.** Running the LLM step on-device would be
@@ -82,7 +82,7 @@ A few decisions had real cost on the other side.
   across encounters; a coordinator can merge two records, but the system
   doesn't unify them silently. Less data hygiene, more dignity.
 - **Loose schema, strict validator.** GPT-4o sometimes invents fields. The
-  validator is the source of truth — anything off-schema gets rejected and
+  validator is the source of truth. Anything off-schema gets rejected and
   surfaced to the worker, not silently logged.
 
 `outcome`
@@ -90,14 +90,14 @@ A few decisions had real cost on the other side.
 VoiceReach won 1st place out of 300+ teams at the SF10x Civics Hackathon and
 was later presented on stage at OpenAI DevDay as part of the *Built for SF
 by SF* showcase. The City of San Francisco adopted the platform for use
-inside outreach programs — a rare path for a hackathon project, and the
+inside outreach programs, a rare path for a hackathon project, and the
 strongest signal we could ask for that the workflow actually fits the work.
 
 `what i'd do differently`
 
-Two things. First, I'd build the offline mode earlier — we shipped with
-queue-on-reconnect, but a true offline-first pipeline (local Whisper + local
-schema validation, cloud reconciliation later) would have moved adoption
+Two things. First, I'd build the offline mode earlier. We shipped with
+queue-on-reconnect, but a true offline-first pipeline (local Whisper plus
+local schema validation, cloud reconciliation later) would have moved adoption
 faster. Second, I'd invest in evaluating extraction quality on real
 transcripts much sooner. Hackathon-quality eval relies on vibes; production
 adoption demanded a real golden set, and we built that retroactively.

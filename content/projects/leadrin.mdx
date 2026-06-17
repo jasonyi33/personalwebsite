@@ -16,14 +16,14 @@ Leadrin is a customer engagement platform for car dealerships. The product
 has two halves that share one fact base: a buyer-facing **Customer Page**
 that turns a sales lead into one inspectable place to verify the vehicle and
 contact the salesperson, and a **Sales Agent** that handles SMS follow-up
-inside DealerCenter — the dealership's CRM — without taking the salesperson
+inside DealerCenter (the dealership's CRM) without taking the salesperson
 out of the loop.
 
 `problem`
 
 A dealership lead has a half-life measured in minutes. The slow first
 response, the lost-in-the-feed inquiry, the salesperson buried under thirty
-other threads — that's where leads die. Existing CRMs are dashboards: they
+other threads: that's where leads die. Existing CRMs are dashboards. They
 don't reply, they don't book, and they don't ground anything in the actual
 car. Buyers, meanwhile, get generic "thanks for your interest" templates
 that don't tell them whether the car is still there, what it costs, or who
@@ -43,7 +43,7 @@ Two products glued together by one fact base.
   appointments only when the buyer confirms an offered slot. It hands off
   silently to a salesperson the moment the conversation enters
   negotiation, legal claims, or off-script territory.
-- **Workflow modes** — `manual`, `auto`, `agent` — let dealerships start
+- **Workflow modes** (`manual`, `auto`, `agent`) let dealerships start
   conservative and graduate into automation at their own pace.
 
 `trade-offs`
@@ -65,7 +65,7 @@ Two products glued together by one fact base.
 - **Humans close in person.** The agent gets the buyer informed and
   booked; the salesperson records personal media when useful, handles
   handoffs, and shows up to the appointment. We're not trying to remove
-  the salesperson — we're trying to give them their morning back.
+  the salesperson; we're trying to give them their morning back.
 
 `status`
 
@@ -76,7 +76,7 @@ path before we widen the salesperson allowlist.
 
 `what i'm learning`
 
-The hard part isn't the LLM. It's the *integration surface* — DealerCenter
+The hard part isn't the LLM. It's the *integration surface*: DealerCenter
 isn't an API, it's a CRM UI. Most engineering hours go into the
 scrape/send contract, recovery from session changes, and stage-write
 idempotency. The agent is only as good as the page it grounds in, and the

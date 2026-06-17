@@ -14,7 +14,7 @@ export async function generateMetadata(
   const exp = sortedExperiences().find((e) => e.slug === slug);
   if (!exp) return {};
   return {
-    title: `${exp.company} — ${exp.role}`,
+    title: `${exp.company} | ${exp.role}`,
     description: exp.summary,
   };
 }

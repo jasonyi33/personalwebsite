@@ -7,7 +7,7 @@ import { allProjects } from 'contentlayer/generated';
 import { SITE } from '@/lib/seo';
 import { loadSpaceGroteskMedium } from '@/lib/og-fonts';
 
-export const alt = `Project — ${SITE.name}`;
+export const alt = `Project | ${SITE.name}`;
 export const contentType = 'image/png';
 export const size = { width: 1200, height: 630 };
 
@@ -139,7 +139,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           <span style={{ display: 'flex' }}>
             jason yi · {project.year}
           </span>
-          <span style={{ display: 'flex', color: COLORS.accent }}>—</span>
+          <span style={{ display: 'flex', color: COLORS.accent }}>|</span>
         </div>
       </div>
     ),
