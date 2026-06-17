@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import {
   getAbout,
   featuredProjects,
@@ -35,6 +36,15 @@ export default function HomePage() {
               <TiltedProjectCard key={p.slug} project={p} />
             ))}
           </div>
+          <div className="mt-5 text-right">
+            <Link
+              href="/projects"
+              className="text-[11px] tracking-[0.22em] uppercase underline-offset-4 hover:underline"
+              style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
+            >
+              See more projects →
+            </Link>
+          </div>
         </section>
       ) : null}
 
@@ -51,6 +61,15 @@ export default function HomePage() {
               <ExperienceRow key={e.slug} experience={e} />
             ))}
           </ul>
+          <div className="mt-5 text-right">
+            <Link
+              href="/experience"
+              className="text-[11px] tracking-[0.22em] uppercase underline-offset-4 hover:underline"
+              style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
+            >
+              See more experience →
+            </Link>
+          </div>
         </section>
       ) : null}
 
