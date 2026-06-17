@@ -11,7 +11,7 @@ interface Props {
 export default function GlobalError({ error, reset }: Props) {
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.error('[jasonyi.live] runtime error:', error);
+    console.error('[jasonyi.ai] runtime error:', error);
   }, [error]);
 
   const message = (error?.message ?? 'Unknown failure.').slice(0, 200);
