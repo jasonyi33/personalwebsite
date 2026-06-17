@@ -127,7 +127,7 @@ export default async function Image() {
           }}
         >
           <span style={{ display: 'flex' }}>about · experience · projects · interests</span>
-          <span style={{ display: 'flex', color: COLORS.accent }}>—</span>
+          <span style={{ display: 'flex', color: COLORS.accent }}>|</span>
         </div>
       </div>
     ),

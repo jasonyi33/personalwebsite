@@ -41,7 +41,7 @@ export function GET(): Response {
     '<?xml version="1.0" encoding="UTF-8" ?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
     '  <channel>',
-    `    <title>${escapeXml(SITE.name)} — feed</title>`,
+    `    <title>${escapeXml(SITE.name)} | feed</title>`,
     `    <link>${escapeXml(SITE.url)}</link>`,
     `    <description>${escapeXml(SITE.description)}</description>`,
     `    <language>en-us</language>`,

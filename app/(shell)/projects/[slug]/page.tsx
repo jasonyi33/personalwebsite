@@ -17,8 +17,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = sortedProjects().find((p) => p.slug === slug);
-  if (!project) return { title: `NOT FOUND — ${SITE.name}` };
-  const title = `${project.title} — ${SITE.name}`;
+  if (!project) return { title: `NOT FOUND | ${SITE.name}` };
+  const title = `${project.title} | ${SITE.name}`;
   const description = project.tagline;
   const url = `${SITE.url}/projects/${project.slug}`;
   return {

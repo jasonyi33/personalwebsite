@@ -4,7 +4,7 @@ const PDF_URL = '/resume.pdf';
 
 export const metadata: Metadata = {
   title: 'Résumé · Jason Yi',
-  description: 'Résumé of Jason Yi — AI Product Engineer at UC Berkeley EECS.',
+  description: 'Résumé of Jason Yi | AI Product Engineer at UC Berkeley EECS.',
   robots: { index: true, follow: true },
 };
 

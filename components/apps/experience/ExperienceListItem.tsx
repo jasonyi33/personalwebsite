@@ -16,7 +16,7 @@ function fmtRange(start: string, end?: string): string {
     const mi = Math.max(0, Math.min(11, Number(m) - 1));
     return `${months[mi]} ${y}`;
   };
-  return `${fmt(start)} — ${end ? fmt(end) : 'present'}`;
+  return `${fmt(start)} - ${end ? fmt(end) : 'present'}`;
 }
 
 export default function ExperienceListItem({

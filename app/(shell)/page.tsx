@@ -10,7 +10,7 @@ import TiltedProjectCard from '@/components/recruiter/TiltedProjectCard';
 import ExperienceRow from '@/components/recruiter/ExperienceRow';
 
 export const metadata: Metadata = {
-  title: 'Jason Yi — AI Product Engineer',
+  title: 'Jason Yi | AI Product Engineer',
 };
 
 export default function HomePage() {
