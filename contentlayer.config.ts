@@ -118,7 +118,7 @@ export const About = defineDocumentType(() => ({
     links: { type: 'list', of: Link, default: [] },
     /** Eyebrow above the headline, e.g. "EECS @ UC BERKELEY". */
     eyebrow: { type: 'string' },
-    /** Big claim line, e.g. "I ship AI products end-to-end." */
+    /** Optional hero heading override — the hero falls back to `name`. */
     headline: { type: 'string' },
     /** Supporting 1–2 sentence value proposition under the headline. */
     valueProp: { type: 'string' },

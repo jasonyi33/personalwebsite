@@ -7,11 +7,11 @@
 export const SITE = {
   name: 'Jason Yi',
   description:
-    'Building agents for real businesses. Founder of VoiceReach (voice agents, backed by OpenAI), now building Leadrin. Prev: TikTok, Adobe, Google. Berkeley EECS.',
+    'Portfolio of Jason Yi, EECS at UC Berkeley. Founder of VoiceReach (voice agents, backed by OpenAI), now building Leadrin. Prev: TikTok, Adobe, Google.',
   url: 'https://www.jasonyi.ai',
   twitter: '@jasonyi361',
   themeColor: '#7dd3fc',
-  tagline: 'Building agents for real businesses.',
+  tagline: 'EECS at UC Berkeley.',
 } as const;
 
 export type SiteConfig = typeof SITE;

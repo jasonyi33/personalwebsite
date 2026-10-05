@@ -14,7 +14,6 @@ const TABS: readonly Tab[] = [
   { href: '/experience', label: 'experience' },
   { href: '/projects', label: 'projects' },
   { href: '/writing', label: 'writing' },
-  { href: '/resume', label: 'resume' },
 ];
 
 function rectFor(el: HTMLElement): { x: number; y: number; w: number; h: number } {

@@ -42,7 +42,7 @@ export default function Hero({ about }: Props) {
           letterSpacing: '-0.015em',
         }}
       >
-        {about.headline ?? 'I ship AI products end-to-end.'}
+        {about.headline ?? about.name}
       </h1>
 
       {about.valueProp ? (
@@ -97,16 +97,6 @@ export default function Hero({ about }: Props) {
             Email me
           </a>
         ) : null}
-        <a
-          href="/resume.pdf"
-          className="rounded-full border px-5 py-2.5 text-[14px] font-medium transition-colors"
-          style={{
-            color: 'var(--text)',
-            borderColor: 'var(--border-2)',
-          }}
-        >
-          Resume PDF ↓
-        </a>
         {linkedIn ? (
           <a
             href={linkedIn}
